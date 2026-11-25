@@ -42,6 +42,10 @@ FROM node:18-alpine AS frontend-builder
 
 WORKDIR /app
 
+# web 子项目通过相对路径（../../../shared/*）引用共享类型与工具，
+# 必须先拷贝 shared/，否则容器内 tsc 报 TS2307（Cannot find module '../../../shared/types'）
+COPY shared/ ./shared/
+
 # Build web
 COPY web/package.json web/package-lock.json ./web/
 RUN cd web && npm ci

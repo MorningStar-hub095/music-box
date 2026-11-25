@@ -25,6 +25,8 @@ music_box_data/
 MusicBox-Launcher-Setup/
 release/
 web/public/audio
+# 爬取曲库数据（版权敏感，绝不进镜像层）
+shared/tracks*.json*
 
 # ---- 与镜像无关的目录 ----
 .git
