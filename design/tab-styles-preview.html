@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>Tab 风格对比 - Midnight Galaxy</title>
+<style>
+  :root {
+    --color-primary: #6366F1;
+    --color-primary-light: #818CF8;
+    --color-primary-glow: rgba(99, 102, 241, 0.4);
+    --color-bg-page: #080B1A;
+    --color-text-primary: #F8FAFC;
+    --color-text-secondary: #94A3B8;
+    --color-text-tertiary: #475569;
+    --glass-bg: rgba(26, 29, 58, 0.4);
+    --glass-bg-hover: rgba(26, 29, 58, 0.6);
+    --glass-border: rgba(255, 255, 255, 0.06);
+    --glass-blur: 24px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--color-bg-page);
+    color: var(--color-text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    min-height: 100vh;
+    padding: 40px 20px;
+    background-image: radial-gradient(ellipse at top, rgba(99, 102, 241, 0.08) 0%, transparent 60%);
+  }
+  .container { max-width: 900px; margin: 0 auto; }
+  h1 {
+    font-size: 22px;
+    color: var(--color-primary-light);
+    text-align: center;
+    margin-bottom: 6px;
+    text-shadow: 0 0 16px var(--color-primary-glow);
+  }
+  .subtitle {
+    text-align: center;
+    color: var(--color-text-secondary);
+    font-size: 13px;
+    margin-bottom: 36px;
+  }
+
+  .style-section { margin-bottom: 28px; }
+  .style-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 10px;
+    padding-left: 4px;
+  }
+  .style-name { font-size: 16px; font-weight: 600; color: var(--color-text-primary); }
+  .style-tag {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(99, 102, 241, 0.15);
+    color: var(--color-primary-light);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+  }
+  .style-desc {
+    color: var(--color-text-secondary);
+    font-size: 12px;
+    margin-bottom: 14px;
+    padding-left: 4px;
+    line-height: 1.5;
+  }
+
+  .nav-mock {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 12px 24px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    min-height: 56px;
+  }
+
+  /* 占位 brand */
+  .brand-mock {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-primary-light);
+    letter-spacing: 0.5px;
+  }
+
+  /* ============ 风格 A: 胶囊包裹式 ============ */
+  .tabs-a {
+    margin-left: auto;
+    display: flex;
+    background: rgba(0,0,0,0.25);
+    border: 1px solid var(--glass-border);
+    border-radius: 999px;
+    padding: 3px;
+  }
+  .tabs-a .tab {
+    padding: 6px 16px;
+    border-radius: 999px;
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    transition: all 0.25s;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .tabs-a .tab:hover { color: var(--color-text-primary); }
+  .tabs-a .tab.active {
+    background: linear-gradient(135deg, var(--color-primary), #4F46E5);
+    color: #fff;
+    box-shadow: 0 2px 8px var(--color-primary-glow);
+  }
+  .tabs-a .tab .badge {
+    font-size: 10px;
+    padding: 1px 5px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.15);
+  }
+  .tabs-a .tab:not(.active) .badge {
+    background: rgba(255,255,255,0.05);
+    color: var(--color-text-tertiary);
+  }
+
+  /* ============ 风格 B: 分隔指示器 ============ */
+  .tabs-b {
+    margin-left: auto;
+    display: flex;
+    gap: 4px;
+  }
+  .tabs-b .tab {
+    padding: 8px 14px;
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    transition: all 0.25s;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .tabs-b .tab:hover { color: var(--color-text-primary); }
+  .tabs-b .tab.active {
+    color: var(--color-primary-light);
+  }
+  .tabs-b .tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 16px;
+    height: 2px;
+    background: var(--color-primary-light);
+    border-radius: 1px;
+    box-shadow: 0 0 8px var(--color-primary-glow);
+  }
+  .tabs-b .tab .badge {
+    font-size: 10px;
+    color: var(--color-text-tertiary);
+  }
+
+  /* ============ 风格 C: 卡片按钮式 ============ */
+  .tabs-c {
+    margin-left: auto;
+    display: flex;
+    gap: 6px;
+  }
+  .tabs-c .tab {
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    background: rgba(26, 29, 58, 0.4);
+    border: 1px solid var(--glass-border);
+    transition: all 0.25s;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .tabs-c .tab:hover {
+    background: var(--glass-bg-hover);
+    color: var(--color-text-primary);
+  }
+  .tabs-c .tab.active {
+    color: var(--color-primary-light);
+    background: rgba(99, 102, 241, 0.12);
+    border-color: rgba(99, 102, 241, 0.4);
+    box-shadow: 0 0 8px var(--color-primary-glow);
+  }
+  .tabs-c .tab .badge {
+    font-size: 10px;
+    color: var(--color-text-tertiary);
+  }
+
+  .hint {
+    margin-top: 24px;
+    padding: 16px 20px;
+    background: rgba(99, 102, 241, 0.08);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    border-radius: 10px;
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+  }
+  .hint strong { color: var(--color-primary-light); }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>♪ Tab 切换风格对比</h1>
+  <p class="subtitle">播放 / 收藏 / 最近 · 三种切换风格</p>
+
+  <!-- 风格 A: 胶囊包裹式 -->
+  <div class="style-section">
+    <div class="style-header">
+      <div class="style-name">风格 A · 胶囊包裹式</div>
+      <span class="style-tag">推荐 · 主流音乐App风格</span>
+    </div>
+    <div class="style-desc">
+      外层胶囊容器 + 内层圆角按钮，激活态用主色渐变填充。<strong>选中态最明显，Apple Music / Spotify 风格</strong>。
+    </div>
+    <div class="nav-mock">
+      <div class="brand-mock">音乐盒子</div>
+      <div class="tabs-a">
+        <div class="tab active">播放</div>
+        <div class="tab">收藏<span class="badge">3</span></div>
+        <div class="tab">最近<span class="badge">9</span></div>
+      </div>
+    </div>
+    <div class="nav-mock">
+      <div class="brand-mock">音乐盒子</div>
+      <div class="tabs-a">
+        <div class="tab">播放</div>
+        <div class="tab active">收藏<span class="badge">3</span></div>
+        <div class="tab">最近<span class="badge">9</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 风格 B: 分隔指示器 -->
+  <div class="style-section">
+    <div class="style-header">
+      <div class="style-name">风格 B · 下划线指示器</div>
+      <span class="style-tag">克制 · Material风格</span>
+    </div>
+    <div class="style-desc">
+      激活态下方一条短发光线指示。<strong>极简、不抢戏，但选中态不够明显</strong>。
+    </div>
+    <div class="nav-mock">
+      <div class="brand-mock">音乐盒子</div>
+      <div class="tabs-b">
+        <div class="tab active">播放</div>
+        <div class="tab">收藏<span class="badge">3</span></div>
+        <div class="tab">最近<span class="badge">9</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 风格 C: 卡片按钮式 -->
+  <div class="style-section">
+    <div class="style-header">
+      <div class="style-name">风格 C · 卡片按钮式</div>
+      <span class="style-tag">当前风格 · 玻璃卡片</span>
+    </div>
+    <div class="style-desc">
+      每个 Tab 是独立玻璃卡片，激活态加主色边框 + 软背景。<strong>当前使用，想升级</strong>。
+    </div>
+    <div class="nav-mock">
+      <div class="brand-mock">音乐盒子</div>
+      <div class="tabs-c">
+        <div class="tab active">播放</div>
+        <div class="tab">收藏<span class="badge">3</span></div>
+        <div class="tab">最近<span class="badge">9</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hint">
+    <strong>建议：</strong>风格 A（胶囊包裹式），原因：<br>
+    • 激活态视觉权重最强，状态切换一目了然<br>
+    • 主色渐变填充 + 阴影，与品牌 Logo 主色一致<br>
+    • 胶囊容器让 Tab 形成独立控件，与左侧品牌区分明显<br>
+    • 数字徽章在激活态用半透明白色，未激活时灰色，强化对比<br>
+    • Apple Music / Spotify 主流选择，用户认知成本低
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,10 @@
+const asar = require('D:/music_box/node_modules/@electron/asar');
+const P = 'D:/music_box/部署包-20261111/MusicBox/resources/app.asar';
+const s = asar.extractFile(P, 'main.js').toString('utf8');
+console.log('asar main.js size:', s.length);
+console.log('has detached pg_ctl:', /detached:\s*true/.test(s));
+const m = /pg_ctl\.exe[\s\S]{0,500}/.exec(s);
+console.log('--- pg_ctl spawn 上下文 ---');
+console.log(m ? m[0].slice(0, 500) : '(未找到)');
+const pkg = asar.extractFile(P, 'package.json').toString();
+console.log('version:', pkg.match(/"version":\s*"([^"]+)"/)[1]);

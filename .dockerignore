@@ -1,0 +1,41 @@
+# ============================================================
+# Docker 构建上下文排除清单（2026-11-03 新增）
+# 作用：① 防止密钥/本地数据进入构建上下文与镜像层缓存
+#       ② 缩小发送给 Docker 守护进程的上下文体积（原先可达数 GB）
+# ============================================================
+
+# ---- 依赖与构建产物（容器内重新安装/构建）----
+**/node_modules
+server/dist
+web/dist
+web/admin/dist
+web/browse/dist
+desktop/release
+
+# ---- 密钥与本地环境（最高优先级，绝不能进镜像层）----
+**/.env
+.env
+.env.*
+server/.env.example
+
+# ---- 大体积本地数据（曲库缓存/音频/安装包）----
+data/
+music/
+music_box_data/
+MusicBox-Launcher-Setup/
+release/
+web/public/audio
+
+# ---- 与镜像无关的目录 ----
+.git
+desktop
+mini-app
+docs
+design
+skills
+scripts/site-packages
+背景文件
+_install_test
+logs
+*.log
+*.tsbuildinfo

@@ -1,0 +1,59 @@
+/* 电影级背景的 CSS 修饰层：暗角 + 底部渐隐 + 极光呼吸 */
+.cinematic-background {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.cinematic-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 130% 100% at 50% 42%,
+    transparent 48%,
+    rgba(3, 4, 12, 0.3) 80%,
+    rgba(2, 3, 10, 0.55) 100%
+  );
+  pointer-events: none;
+}
+
+.cinematic-floor-fade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 26vh;
+  background: linear-gradient(to top, rgba(4, 5, 16, 0.72), transparent);
+  pointer-events: none;
+}
+
+/* 极光呼吸层：CSS 实现，即使音频暂停也有微弱生命感 */
+.cinematic-background::before {
+  content: '';
+  position: absolute;
+  inset: -20%;
+  background:
+    radial-gradient(ellipse 34% 26% at 22% 28%, rgba(99, 102, 241, 0.14), transparent 60%),
+    radial-gradient(ellipse 30% 24% at 78% 66%, rgba(23, 195, 178, 0.11), transparent 60%),
+    radial-gradient(ellipse 26% 20% at 60% 18%, rgba(139, 92, 246, 0.10), transparent 62%);
+  animation: cinematic-aurora 26s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+/* 胶片颗粒质感层：静态细颗粒，叠加所有背景，提升"胶片感" */
+.cinematic-grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.045;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+@keyframes cinematic-aurora {
+  0% { transform: translate3d(-2%, -1%, 0) scale(1); opacity: 0.85; }
+  50% { transform: translate3d(2%, 2%, 0) scale(1.06); opacity: 1; }
+  100% { transform: translate3d(-1%, 1%, 0) scale(1.02); opacity: 0.9; }
+}

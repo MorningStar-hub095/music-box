@@ -1,0 +1,120 @@
+/* web/src/components/StageLyrics.css */
+/* 沉浸舞台 · 滚动歌词 — Mineradio 式歌词舞台（自研） */
+
+.stage-lyrics {
+  --line-h: 68px; /* 与 StageLyrics.tsx 的 LINE_H 保持一致 */
+  --pulse: 0;
+  position: absolute;
+  inset: 90px 0 130px 0;
+  z-index: 20; /* 高于暗角/颗粒(5)，低于顶栏/底栏(3200) */
+  overflow: hidden;
+  pointer-events: none;
+  /* 上下边缘渐隐 */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 16%, #000 84%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 16%, #000 84%, transparent 100%);
+}
+
+.stage-lyrics-list {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  will-change: transform;
+  transform-origin: center;
+}
+
+/* ── 歌词行 ── */
+.stage-lyric-line {
+  height: var(--line-h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 9vw;
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  line-height: 1.45;
+  color: rgba(232, 238, 255, 0.9);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: auto;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100vw;
+  margin: 0 auto;
+  transition:
+    opacity 0.5s ease,
+    filter 0.5s ease,
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    font-size 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.stage-lyric-text {
+  display: block;
+}
+
+/* ── 当前行：品牌渐变大字 + 辉光（节拍脉动） ── */
+.stage-lyric-line.active {
+  font-size: 31px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  background: linear-gradient(92deg, #9be7ff 0%, #a78bfa 48%, #f0abfc 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  filter:
+    drop-shadow(0 0 calc(8px + var(--pulse) * 18px) rgba(167, 139, 250, calc(0.45 + var(--pulse) * 0.4)))
+    drop-shadow(0 0 30px rgba(125, 211, 252, 0.26));
+}
+
+/* ── 浏览选中行：银白辉光 ── */
+.stage-lyric-line.selected {
+  font-size: 27px;
+  font-weight: 700;
+  color: #eef2ff;
+  text-shadow:
+    0 0 12px rgba(226, 232, 240, 0.55),
+    0 0 32px rgba(226, 232, 240, 0.22);
+}
+
+/* ── 浏览提示 ── */
+.stage-lyrics-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  padding: 5px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: rgba(226, 232, 240, 0.75);
+  background: rgba(12, 14, 28, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  animation: stage-lyrics-hint-in 0.25s ease;
+}
+@keyframes stage-lyrics-hint-in {
+  from { opacity: 0; transform: translate(-50%, 6px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+/* ── 纯音乐占位 ── */
+.stage-lyrics-empty {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 20px;
+  letter-spacing: 4px;
+  color: rgba(226, 232, 240, 0.5);
+  text-shadow: 0 0 18px rgba(167, 139, 250, 0.25);
+  animation: stage-lyrics-empty-breathe 4s ease-in-out infinite;
+}
+@keyframes stage-lyrics-empty-breathe {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 0.85; }
+}

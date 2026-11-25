@@ -1,0 +1,619 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Song {
+  id            String         @id @db.VarChar(50)
+  title         String         @db.VarChar(200)
+  artist        String         @db.VarChar(200)
+  album         String?        @db.VarChar(200)
+  albumCover    String?        @map("album_cover") @db.VarChar(500)
+  audioUrl      String         @map("audio_url") @db.VarChar(500)
+  audioUrlMp3   String?        @map("audio_url_mp3") @db.VarChar(500)
+  lyricContent  String?        @map("lyric_content") @db.Text
+  coverColor    String?        @map("cover_color") @db.VarChar(20)
+  duration      Int?           @map("duration")
+  platform      String?        @db.VarChar(20)
+  playable      Boolean        @default(true)
+  playCount     Int            @default(0) @map("play_count")
+  commentCount  Int            @default(0) @map("comment_count")
+  likeCount     Int            @default(0) @map("like_count")
+  favoriteCount Int            @default(0) @map("favorite_count")
+  hotScore      Float          @default(0) @map("hot_score")
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+  urlCheckedAt  DateTime?      @map("url_checked_at")
+  crawlTaskId   BigInt?        @map("crawl_task_id")
+  dataSource    DataSource     @default(manual) @map("data_source")
+  importedAt    DateTime?      @map("imported_at")
+  importedBy    Int?           @map("imported_by")
+  lastEditedBy  Int?           @map("last_edited_by")
+  sourceUrl     String?        @map("source_url") @db.VarChar(500)
+  archived      Boolean        @default(false)
+  archivedAt    DateTime?      @map("archived_at")
+  archiveReason String?        @map("archive_reason") @db.VarChar(200)
+  filePath      String?        @map("file_path") @db.VarChar(500)
+
+  // URL管理扩展字段 (2026-08-08)
+  urlSource       String?    @map("url_source") @db.VarChar(20)   // URL来源: netease, qq, kugou
+  urlExpiresAt    DateTime?  @map("url_expires_at")                 // 预计过期时间
+  urlRefreshCount Int        @default(0) @map("url_refresh_count")  // 累计刷新次数
+  urlLastFailure  DateTime?  @map("url_last_failure")              // 最后失败时间
+  urlFailureCount Int        @default(0) @map("url_failure_count") // 连续失败次数
+  decades       SongDecade[]
+  genres        SongGenre[]
+  languages     SongLanguage[]
+  moods         SongMood[]
+  scenes        SongScene[]
+  tags          SongTag[]
+  playlists     PlaylistSong[]
+  features        SongFeature?
+  dailyRecommendations DailyRecommendation[]
+  capsules        Capsule[]
+  urlRefreshLogs  UrlRefreshLog[]
+  comments      Comment[]
+  license         AudioLicense?
+
+  @@index([title])
+  @@index([artist])
+  @@index([platform])
+  @@index([hotScore])
+  @@index([createdAt])
+  @@index([dataSource])
+  @@index([archived])
+  @@index([album], map: "ft_album")
+  @@index([artist], map: "ft_artist")
+  @@index([title, artist, album], map: "ft_search")
+  @@index([title], map: "ft_title")
+  @@index([playable, hotScore], map: "idx_playable_hot_score")
+  @@index([urlExpiresAt], map: "idx_url_expires_at")
+  @@index([urlCheckedAt], map: "idx_url_checked_at")
+  @@index([playable, urlCheckedAt], map: "idx_playable_url_checked")
+  @@map("songs")
+}
+
+// URL刷新日志：记录每次刷新操作，用于审计和统计
+model UrlRefreshLog {
+  id           BigInt   @id @default(autoincrement())
+  songId       String   @map("song_id") @db.VarChar(50)
+  oldUrl       String?  @map("old_url") @db.Text
+  newUrl       String?  @map("new_url") @db.Text
+  source       String   @db.VarChar(20)   // netease, qq, kugou, manual
+  success      Boolean
+  error        String?  @db.Text
+  responseTime Int      @map("response_time")   // 响应时间(ms)
+  fileSize     Int      @default(0) @map("file_size")  // 文件大小(bytes)
+  triggeredBy  String   @default("manual") @map("triggered_by") @db.VarChar(20) // manual, scheduler, auto
+  createdAt    DateTime @default(now()) @map("created_at")
+  song         Song     @relation(fields: [songId], references: [id], onDelete: Cascade)
+
+  @@index([songId])
+  @@index([createdAt])
+  @@index([source])
+  @@index([success])
+  @@map("url_refresh_logs")
+}
+
+// URL预警记录：系统自动检测到的异常情况
+model UrlAlert {
+  id         BigInt   @id @default(autoincrement())
+  type       String   @db.VarChar(50)   // validity_rate, refresh_failure, source_failure
+  level      String   @db.VarChar(20)   // warning, critical
+  message    String   @db.Text
+  data       Json?
+  resolved    Boolean  @default(false)
+  resolvedAt DateTime? @map("resolved_at")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@index([type])
+  @@index([resolved])
+  @@index([createdAt])
+  @@index([level])
+  @@map("url_alerts")
+}
+
+// 音频播放错误日志：记录前端上报的播放失败事件
+model AudioErrorLog {
+  id          BigInt   @id @default(autoincrement())
+  trackId     String   @map("track_id") @db.VarChar(50)
+  userId      Int?     @map("user_id")
+  errorType   String   @map("error_type") @db.VarChar(50)   // url_expired, network_error, decode_error, unknown
+  urlSource   String?  @map("url_source") @db.VarChar(20)   // cache, remote, fallback
+  statusCode  Int?     @map("status_code")                   // HTTP响应码
+  userAgent   String?  @map("user_agent") @db.Text
+  details     String?  @db.Text                              // 额外错误详情
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([trackId])
+  @@index([errorType])
+  @@index([createdAt])
+  @@map("audio_error_logs")
+}
+
+model Genre {
+  id        Int         @id @default(autoincrement())
+  name      String      @db.VarChar(50)
+  parentId  Int?        @map("parent_id")
+  level     Int         @default(1)
+  sortOrder Int         @default(0) @map("sort_order")
+  parent    Genre?      @relation("GenreHierarchy", fields: [parentId], references: [id], map: "genres_parent_id_genre_fkey")
+  children  Genre[]     @relation("GenreHierarchy")
+  songs     SongGenre[]
+
+  @@index([parentId], map: "genres_parent_id_fkey")
+  @@map("genres")
+}
+
+model Language {
+  id    Int            @id @default(autoincrement())
+  name  String         @db.VarChar(50)
+  code  String         @unique @db.VarChar(10)
+  songs SongLanguage[]
+
+  @@map("languages")
+}
+
+model Scene {
+  id    Int         @id @default(autoincrement())
+  name  String      @db.VarChar(50)
+  icon  String?     @db.VarChar(50)
+  songs SongScene[]
+
+  @@map("scenes")
+}
+
+model Mood {
+  id    Int        @id @default(autoincrement())
+  name  String     @db.VarChar(50)
+  icon  String?    @db.VarChar(50)
+  songs SongMood[]
+
+  @@map("moods")
+}
+
+model Decade {
+  id        Int          @id @default(autoincrement())
+  name      String       @db.VarChar(20)
+  startYear Int?         @map("start_year")
+  endYear   Int?         @map("end_year")
+  songs     SongDecade[]
+
+  @@map("decades")
+}
+
+model Tag {
+  id        Int       @id @default(autoincrement())
+  name      String    @db.VarChar(50)
+  parentId  Int?      @map("parent_id")
+  level     Int       @default(1)
+  userId    Int?      @map("user_id")
+  createdAt DateTime  @default(now()) @map("created_at")
+  songs     SongTag[]
+  parent    Tag?      @relation("TagHierarchy", fields: [parentId], references: [id], map: "tags_parent_id_tag_fkey")
+  children  Tag[]     @relation("TagHierarchy")
+
+  @@index([parentId], map: "tags_parent_id_fkey")
+  @@map("tags")
+}
+
+model SongGenre {
+  songId  String @map("song_id")
+  genreId Int    @map("genre_id")
+  genre   Genre  @relation(fields: [genreId], references: [id], map: "song_genres_genre_id_genre_fkey")
+  song    Song   @relation(fields: [songId], references: [id], onDelete: Cascade, map: "song_genres_song_id_song_fkey")
+
+  @@id([songId, genreId])
+  @@index([genreId], map: "song_genres_genre_id_fkey")
+  @@map("song_genres")
+}
+
+model SongLanguage {
+  songId     String   @map("song_id")
+  languageId Int      @map("language_id")
+  language   Language @relation(fields: [languageId], references: [id], map: "song_languages_language_id_lang_fkey")
+  song       Song     @relation(fields: [songId], references: [id], onDelete: Cascade, map: "song_languages_song_id_song_fkey")
+
+  @@id([songId, languageId])
+  @@index([languageId], map: "song_languages_language_id_fkey")
+  @@map("song_languages")
+}
+
+model SongScene {
+  songId  String @map("song_id")
+  sceneId Int    @map("scene_id")
+  scene   Scene  @relation(fields: [sceneId], references: [id], map: "song_scenes_scene_id_scene_fkey")
+  song    Song   @relation(fields: [songId], references: [id], onDelete: Cascade, map: "song_scenes_song_id_song_fkey")
+
+  @@id([songId, sceneId])
+  @@index([sceneId], map: "song_scenes_scene_id_fkey")
+  @@map("song_scenes")
+}
+
+model SongMood {
+  songId String @map("song_id")
+  moodId Int    @map("mood_id")
+  mood   Mood   @relation(fields: [moodId], references: [id], map: "song_moods_mood_id_mood_fkey")
+  song   Song   @relation(fields: [songId], references: [id], onDelete: Cascade, map: "song_moods_song_id_song_fkey")
+
+  @@id([songId, moodId])
+  @@index([moodId], map: "song_moods_mood_id_fkey")
+  @@map("song_moods")
+}
+
+model SongDecade {
+  songId   String @map("song_id")
+  decadeId Int    @map("decade_id")
+  decade   Decade @relation(fields: [decadeId], references: [id], map: "song_decades_decade_id_decade_fkey")
+  song     Song   @relation(fields: [songId], references: [id], onDelete: Cascade, map: "song_decades_song_id_song_fkey")
+
+  @@id([songId, decadeId])
+  @@index([decadeId], map: "song_decades_decade_id_fkey")
+  @@map("song_decades")
+}
+
+model SongTag {
+  songId String @map("song_id")
+  tagId  Int    @map("tag_id")
+  song   Song   @relation(fields: [songId], references: [id], onDelete: Cascade, map: "song_tags_song_id_song_fkey")
+  tag    Tag    @relation(fields: [tagId], references: [id], map: "song_tags_tag_id_tag_fkey")
+
+  @@id([songId, tagId])
+  @@index([tagId], map: "song_tags_tag_id_fkey")
+  @@map("song_tags")
+}
+
+model User {
+  id                  Int            @id @default(autoincrement())
+  username            String         @unique @db.VarChar(50)
+  email               String         @unique @db.VarChar(100)
+  passwordHash        String         @map("password_hash") @db.VarChar(255)
+  role                UserRole       @default(user)
+  status              UserStatus     @default(active)
+  createdAt           DateTime       @default(now()) @map("created_at")
+  lastLoginAt         DateTime?      @map("last_login_at")
+  securityQuestion    String?        @map("security_question") @db.VarChar(200)
+  securityAnswer      String?        @map("security_answer") @db.VarChar(255)
+  resetToken          String?        @map("reset_token") @db.VarChar(255)
+  resetTokenExpiresAt DateTime?      @map("reset_token_expires_at")
+  emotionDna          Json?          @map("emotion_dna")
+  socialDna           SocialDna?
+  operationLogs       OperationLog[]
+  playlists           Playlist[]
+  listeningEvents     ListeningEvent[]
+  dailyRecommendations DailyRecommendation[]
+  recommendationFeedback RecommendationFeedback[]
+  capsules             Capsule[]
+  comments        Comment[]
+  commentLikes    CommentLike[]
+  commentReports  CommentReport[]
+  radioSessions   RadioSession[]
+  preferenceMemory UserPreferenceMemory[]
+
+  @@map("users")
+}
+
+model OperationLog {
+  id            BigInt   @id @default(autoincrement())
+  userId        Int?     @map("user_id")
+  action        String   @db.VarChar(50)
+  targetType    String?  @map("target_type") @db.VarChar(50)
+  targetId      String?  @map("target_id") @db.VarChar(50)
+  details       Json?
+  ipAddress     String?  @map("ip_address") @db.VarChar(45)
+  createdAt     DateTime @default(now()) @map("created_at")
+  changedFields Json?    @map("changed_fields")
+  newValues     Json?    @map("new_values")
+  oldValues     Json?    @map("old_values")
+  userAgent     String?  @map("user_agent") @db.Text
+  user          User?    @relation(fields: [userId], references: [id])
+
+  @@index([targetType, targetId])
+  @@index([userId])
+  @@index([createdAt])
+  @@map("operation_logs")
+}
+
+model Playlist {
+  id          Int           @id @default(autoincrement())
+  name        String        @db.VarChar(100)
+  description String?       @db.Text
+  userId      Int?          @map("user_id")
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+  user        User?         @relation(fields: [userId], references: [id])
+  songs       PlaylistSong[]
+
+  @@index([userId])
+  @@map("playlists")
+}
+
+model PlaylistSong {
+  id         Int      @id @default(autoincrement())
+  playlistId Int      @map("playlist_id")
+  songId     String   @map("song_id")
+  sortOrder  Int      @default(0) @map("sort_order")
+  addedAt    DateTime @default(now()) @map("added_at")
+  playlist   Playlist @relation(fields: [playlistId], references: [id], onDelete: Cascade)
+  song       Song     @relation(fields: [songId], references: [id], onDelete: Cascade)
+
+  @@unique([playlistId, songId])
+  @@index([songId])
+  @@map("playlist_songs")
+}
+
+model CrawlLog {
+  id             BigInt      @id @default(autoincrement())
+  taskType       String      @map("task_type") @db.VarChar(50)
+  platform       String?     @db.VarChar(20)
+  status         CrawlStatus @default(running)
+  totalCount     Int         @default(0) @map("total_count")
+  successCount   Int         @default(0) @map("success_count")
+  failedCount    Int         @default(0) @map("failed_count")
+  newCount       Int         @default(0) @map("new_count")
+  updatedCount   Int         @default(0) @map("updated_count")
+  errorMessage   String?     @map("error_message") @db.Text
+  startedAt      DateTime    @default(now()) @map("started_at")
+  completedAt    DateTime?   @map("completed_at")
+  crawlSource    String?     @map("crawl_source") @db.VarChar(100)
+  keyword        String?     @db.VarChar(200)
+  targetCount    Int?        @map("target_count")
+  batchSize      Int         @default(10) @map("batch_size")
+  retryCount     Int         @default(0) @map("retry_count")
+
+  @@index([status])
+  @@index([startedAt])
+  @@map("crawl_logs")
+}
+
+enum UserRole {
+  super_admin
+  admin
+  editor
+  user
+}
+
+enum UserStatus {
+  pending
+  active
+  disabled
+}
+
+enum CrawlStatus {
+  running
+  success
+  partial
+  failed
+}
+
+enum DataSource {
+  crawler
+  manual
+  import
+  api
+}
+
+// 音频授权登记（2026-11-18 三层供给架构）：逐曲登记来源与许可，确保 100% 可追溯
+model AudioLicense {
+  songId       String   @id @map("song_id")
+  source       String   @db.VarChar(20)                      // jamendo / manual / self-hosted
+  licenseType  String   @map("license_type") @db.VarChar(40) // CC-BY / CC-BY-SA / CC0 / owned ...
+  sourcePage   String?  @map("source_page") @db.VarChar(500) // 曲目来源页（Jamendo track page）
+  artistPage   String?  @map("artist_page") @db.VarChar(500)
+  registeredAt DateTime @default(now()) @map("registered_at")
+  song         Song     @relation(fields: [songId], references: [id], onDelete: Cascade)
+
+  @@map("audio_licenses")
+}
+
+// 聆听事件流：所有功能的数据底座
+model ListeningEvent {
+  id               BigInt    @id @default(autoincrement())
+  userId           Int?      @map("user_id")
+  songId           String?   @map("song_id")
+  trackPath        String?   @map("track_path") @db.VarChar(500)
+  trackTitle       String?   @map("track_title") @db.VarChar(300)
+  trackArtist      String?   @map("track_artist") @db.VarChar(300)
+  eventType        String    @map("event_type") @db.VarChar(30)
+  positionMs       Int?      @map("position_ms")
+  durationMs       Int?      @map("duration_ms")
+  featSubBass      Float     @default(0) @map("feat_sub_bass")
+  featBass         Float     @default(0) @map("feat_bass")
+  featLowMid       Float     @default(0) @map("feat_low_mid")
+  featMid          Float     @default(0) @map("feat_mid")
+  featHighMid      Float     @default(0) @map("feat_high_mid")
+  featPresence     Float     @default(0) @map("feat_presence")
+  featBrilliance   Float     @default(0) @map("feat_brilliance")
+  featAir          Float     @default(0) @map("feat_air")
+  featBeat         Float     @default(0) @map("feat_beat")
+  featBeatStrength Float     @default(0) @map("feat_beat_strength")
+  engagementScore  Float     @default(0) @map("engagement_score")
+  heightsSeries    Json?     @map("heights_series")
+  occurredAt       DateTime  @default(now()) @map("occurred_at")
+  user             User?     @relation(fields: [userId], references: [id])
+
+  @@index([userId, occurredAt])
+  @@index([songId])
+  @@index([trackPath])
+  @@index([eventType])
+  @@map("listening_events")
+}
+
+// 歌曲声学特征向量（推荐/基因图谱共用，离线预计算）
+model SongFeature {
+  songId          String   @id @map("song_id")
+  subBass         Float    @default(0)
+  bass            Float    @default(0)
+  lowMid          Float    @default(0)
+  mid             Float    @default(0)
+  highMid         Float    @default(0)
+  presence        Float    @default(0)
+  brilliance      Float    @default(0)
+  air             Float    @default(0)
+  bpm             Float    @default(0)
+  energy          Float    @default(0)
+  // C4（v1.4.7 注释声明）：bpm/energy 字段当前未被任何评分/相似度逻辑消费
+  // （song-feature-extractor 只取 8 维声学特征），字段保留——P0-1 真实声学特征管线
+  // 落地时（离线提取 bpm/energy 写回）将一并接入相似度计算
+  genomeX         Float?   @map("genome_x")
+  genomeY         Float?   @map("genome_y")
+  computedAt      DateTime @default(now()) @map("computed_at")
+  song            Song     @relation(fields: [songId], references: [id], onDelete: Cascade)
+  @@index([genomeX])
+  @@index([genomeY])
+  @@map("song_features")
+}
+
+model DailyRecommendation {
+  id          BigInt   @id @default(autoincrement())
+  userId      Int      @map("user_id")
+  songId      String   @map("song_id")
+  rank        Int
+  reason      String?  @db.VarChar(200)
+  generatedAt DateTime @default(now()) @map("generated_at")
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  song        Song     @relation(fields: [songId], references: [id], onDelete: Cascade)
+  @@unique([userId, generatedAt, songId])
+  @@index([userId, generatedAt])
+  @@map("daily_recommendations")
+}
+
+model RecommendationFeedback {
+  id          BigInt   @id @default(autoincrement())
+  userId      Int      @map("user_id")
+  songId      String   @map("song_id")
+  feedback    String   @db.VarChar(20)
+  weight      Float    @default(1)
+  createdAt   DateTime @default(now()) @map("created_at")
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId, createdAt])
+  @@map("recommendation_feedback")
+}
+
+model Capsule {
+  id           Int       @id @default(autoincrement())
+  userId       Int       @map("user_id")
+  trackPath    String    @map("track_path")
+  songId       String?   @map("song_id") @db.VarChar(50)
+  snapshotJson Json      @map("snapshot_json")
+  lockedUntil  DateTime  @map("locked_until")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  revealedAt   DateTime? @map("revealed_at")
+  user         User      @relation(fields: [userId], references: [id])
+  song         Song?     @relation(fields: [songId], references: [id])
+
+  @@index([userId])
+  @@index([lockedUntil])
+  @@map("capsules")
+}
+
+// 社交 DNA 暗号：12 维向量 + SVG 暗号，余弦补集匹配
+model SocialDna {
+  id          Int      @id @default(autoincrement())
+  userId      Int      @unique @map("user_id")
+  vectorJson  Json     @map("vector_json")
+  cipherSvg   String   @map("cipher_svg") @db.Text
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
+  user        User     @relation(fields: [userId], references: [id])
+
+  @@map("social_dna")
+}
+
+model Comment {
+  id           BigInt   @id @default(autoincrement())
+  userId       Int      @map("user_id")
+  songId       String   @map("song_id") @db.VarChar(50)
+  commentType  String   @map("comment_type") @db.VarChar(10)
+  timestampSec Int?     @map("timestamp_sec")
+  content      String   @db.Text
+  likeCount    Int      @default(0) @map("like_count")
+  reportCount  Int      @default(0) @map("report_count")
+  status       String   @default("active") @db.VarChar(10)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  user     User     @relation(fields: [userId], references: [id])
+  song     Song     @relation(fields: [songId], references: [id], onDelete: Cascade)
+  likes    CommentLike[]
+  reports  CommentReport[]
+
+  @@index([songId, commentType, createdAt])
+  @@index([songId, commentType, likeCount])
+  @@index([songId, timestampSec])
+  @@index([userId])
+  @@map("comments")
+}
+
+model CommentLike {
+  id        BigInt   @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  commentId BigInt   @map("comment_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user    User    @relation(fields: [userId], references: [id])
+  comment Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, commentId])
+  @@map("comment_likes")
+}
+
+model CommentReport {
+  id        BigInt   @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  commentId BigInt   @map("comment_id")
+  reason    String   @db.VarChar(200)
+  status    String   @default("pending") @db.VarChar(10)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user    User    @relation(fields: [userId], references: [id])
+  comment Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, commentId])
+  @@map("comment_reports")
+}
+
+model RadioSession {
+  id        BigInt          @id @default(autoincrement())
+  userId    Int             @map("user_id")
+  title     String?         @db.VarChar(100)
+  createdAt DateTime        @default(now()) @map("created_at")
+  updatedAt DateTime        @updatedAt @map("updated_at")
+
+  user     User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages RadioMessage[]
+
+  @@index([userId, updatedAt])
+  @@map("radio_sessions")
+}
+
+model RadioMessage {
+  id        BigInt   @id @default(autoincrement())
+  sessionId BigInt   @map("session_id")
+  role      String   @db.VarChar(10)
+  content   String   @db.Text
+  songs     Json?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  session RadioSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+  @@map("radio_messages")
+}
+
+model UserPreferenceMemory {
+  id        BigInt   @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  key       String   @db.VarChar(100)
+  value     String   @db.Text
+  score     Float    @default(1.0)
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, key])
+  @@map("user_preference_memory")
+}

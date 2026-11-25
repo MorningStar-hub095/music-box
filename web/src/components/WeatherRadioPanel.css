@@ -1,0 +1,165 @@
+/* web/src/components/WeatherRadioPanel.css — 天气电台面板 */
+
+.weather-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2400;
+  background: rgba(6, 6, 14, 0.72);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 10vh;
+  animation: weather-fade-in 0.25s ease;
+}
+@keyframes weather-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.weather-panel {
+  width: 420px;
+  max-width: calc(100vw - 32px);
+  max-height: 76vh;
+  overflow-y: auto;
+  border-radius: 18px;
+  background: rgba(18, 18, 30, 0.94);
+  border: 1px solid rgba(255,255,255,0.12);
+  padding: 18px;
+  color: #ddd;
+  animation: weather-panel-in 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@keyframes weather-panel-in {
+  from { opacity: 0; transform: translateY(-14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.weather-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 14px;
+}
+.weather-close {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.08);
+  color: #aaa;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.weather-close:hover { background: rgba(239,68,68,0.6); color: #fff; }
+
+.weather-city-row {
+  display: flex;
+  gap: 8px;
+}
+.weather-city-input {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(0,0,0,0.35);
+  color: #eee;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.weather-city-input:focus { border-color: rgba(255,255,255,0.4); }
+.weather-fetch-btn {
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(135deg, #4f8ef7, #17C3B2);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+}
+.weather-fetch-btn:hover { transform: scale(1.03); }
+.weather-fetch-btn:disabled { opacity: 0.5; cursor: wait; }
+
+.weather-error {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(239,68,68,0.14);
+  border: 1px solid rgba(239,68,68,0.35);
+  color: #fca5a5;
+  font-size: 12px;
+}
+
+.weather-now {
+  margin-top: 14px;
+  padding: 14px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(79,142,247,0.16), rgba(23,195,178,0.12));
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.weather-now-main {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+.weather-desc { font-size: 18px; font-weight: 600; color: #fff; }
+.weather-temp { font-size: 24px; font-weight: 700; color: #7ee0c8; }
+.weather-now-sub {
+  margin-top: 6px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.6);
+}
+.weather-now-sub b { color: #ffd479; font-weight: 600; }
+
+.weather-playlist {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.weather-song {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  transition: background 0.15s;
+}
+.weather-song:hover { background: rgba(255,255,255,0.06); }
+.weather-song-idx { width: 18px; color: rgba(255,255,255,0.35); text-align: right; flex-shrink: 0; }
+.weather-song-title { flex: 1; color: #eee; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.weather-song-artist { max-width: 120px; color: rgba(255,255,255,0.45); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-shrink: 0; }
+.weather-song-more { text-align: center; font-size: 11px; color: rgba(255,255,255,0.4); padding: 6px; }
+
+.weather-play-btn {
+  width: 100%;
+  margin-top: 14px;
+  padding: 12px;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #17C3B2, #4f8ef7);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.2s;
+}
+.weather-play-btn:hover { transform: scale(1.02); box-shadow: 0 6px 22px rgba(23,195,178,0.35); }
+.weather-play-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.weather-idle-hint {
+  margin-top: 14px;
+  padding: 16px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.04);
+  border: 1px dashed rgba(255,255,255,0.14);
+  font-size: 12px;
+  line-height: 1.9;
+  color: rgba(255,255,255,0.55);
+  text-align: center;
+}

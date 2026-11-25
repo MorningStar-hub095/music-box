@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>品牌 Logo 风格对比 - Midnight Galaxy</title>
+<style>
+  :root {
+    --color-primary: #6366F1;
+    --color-primary-light: #818CF8;
+    --color-primary-glow: rgba(99, 102, 241, 0.4);
+    --color-bg-page: #080B1A;
+    --color-bg-card: #0F1228;
+    --color-text-primary: #F8FAFC;
+    --color-text-secondary: #94A3B8;
+    --glass-bg: rgba(26, 29, 58, 0.4);
+    --glass-bg-hover: rgba(26, 29, 58, 0.6);
+    --glass-border: rgba(255, 255, 255, 0.06);
+    --glass-blur: 24px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--color-bg-page);
+    color: var(--color-text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    min-height: 100vh;
+    padding: 40px 20px;
+    background-image:
+      radial-gradient(ellipse at top, rgba(99, 102, 241, 0.08) 0%, transparent 60%);
+  }
+  .container { max-width: 900px; margin: 0 auto; }
+  h1 {
+    font-size: 22px;
+    color: var(--color-primary-light);
+    text-align: center;
+    margin-bottom: 6px;
+    text-shadow: 0 0 16px var(--color-primary-glow);
+  }
+  .subtitle {
+    text-align: center;
+    color: var(--color-text-secondary);
+    font-size: 13px;
+    margin-bottom: 36px;
+  }
+
+  /* 模拟导航栏 */
+  .nav-mock {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 14px 24px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    min-height: 56px;
+  }
+
+  .style-section {
+    margin-bottom: 28px;
+  }
+  .style-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 10px;
+    padding-left: 4px;
+  }
+  .style-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--color-text-primary);
+  }
+  .style-tag {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(99, 102, 241, 0.15);
+    color: var(--color-primary-light);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+  }
+  .style-desc {
+    color: var(--color-text-secondary);
+    font-size: 12px;
+    margin-bottom: 14px;
+    padding-left: 4px;
+    line-height: 1.5;
+  }
+
+  /* ============ 风格 A: 动画音符 + 文字 ============ */
+  .brand-a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .brand-a-icon {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--color-primary), #4F46E5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 12px var(--color-primary-glow);
+    position: relative;
+    animation: brand-icon-float 3s ease-in-out infinite;
+  }
+  @keyframes brand-icon-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-2px); }
+  }
+  .brand-a-icon svg {
+    width: 16px; height: 16px;
+    fill: #fff;
+    filter: drop-shadow(0 0 4px rgba(255,255,255,0.4));
+  }
+  .brand-a-text {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    letter-spacing: 0.5px;
+  }
+  .brand-a-text .accent {
+    color: var(--color-primary-light);
+  }
+
+  /* 播放状态变体 */
+  .brand-a.playing .brand-a-icon {
+    animation: brand-icon-spin 4s linear infinite;
+  }
+  @keyframes brand-icon-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* ============ 风格 B: 几何标识 + 文字 ============ */
+  .brand-b {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .brand-b-icon {
+    width: 28px; height: 28px;
+    border: 2px solid var(--color-primary-light);
+    border-radius: 50%;
+    position: relative;
+    box-shadow: 0 0 12px var(--color-primary-glow);
+  }
+  .brand-b-icon::before {
+    content: '';
+    position: absolute;
+    inset: 4px;
+    border-radius: 50%;
+    border: 1px solid var(--color-primary);
+  }
+  .brand-b-icon::after {
+    content: '';
+    position: absolute;
+    inset: 9px;
+    background: var(--color-primary-light);
+    border-radius: 50%;
+    box-shadow: 0 0 6px var(--color-primary-light);
+  }
+  .brand-b-text {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    letter-spacing: 1px;
+  }
+
+  /* ============ 风格 C: 纯文字 ============ */
+  .brand-c {
+    display: flex;
+    align-items: center;
+  }
+  .brand-c-text {
+    font-size: 16px;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--color-primary-light), #F472B6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 1.2px;
+    filter: drop-shadow(0 0 8px var(--color-primary-glow));
+  }
+  .brand-c-text .small {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    -webkit-text-fill-color: var(--color-text-secondary);
+    margin-left: 4px;
+    filter: none;
+  }
+
+  /* ============ 风格 D: 抽象图形 ============ */
+  .brand-d {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .brand-d-icon {
+    width: 32px; height: 32px;
+    position: relative;
+  }
+  .brand-d-icon svg {
+    width: 100%; height: 100%;
+    animation: brand-d-rotate 8s linear infinite;
+  }
+  @keyframes brand-d-rotate {
+    to { transform: rotate(360deg); }
+  }
+  .brand-d-icon .orbit {
+    fill: none;
+    stroke: var(--color-primary-light);
+    stroke-width: 1.2;
+    opacity: 0.5;
+  }
+  .brand-d-icon .planet {
+    fill: var(--color-primary-light);
+    filter: drop-shadow(0 0 4px var(--color-primary-glow));
+  }
+  .brand-d-icon .core {
+    fill: #fff;
+    filter: drop-shadow(0 0 6px #fff);
+  }
+
+  /* 右侧 tabs 占位（保持导航栏视觉完整） */
+  .nav-tabs-mock {
+    margin-left: auto;
+    display: flex;
+    gap: 4px;
+    font-size: 12px;
+    color: var(--color-text-secondary);
+  }
+  .nav-tabs-mock span {
+    padding: 4px 10px;
+    border-radius: 6px;
+  }
+  .nav-tabs-mock span.active {
+    color: var(--color-primary-light);
+    background: rgba(99, 102, 241, 0.12);
+  }
+
+  .hint {
+    margin-top: 24px;
+    padding: 16px 20px;
+    background: rgba(99, 102, 241, 0.08);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    border-radius: 10px;
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+  }
+  .hint strong { color: var(--color-primary-light); }
+  .state-label {
+    display: inline-block;
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 3px;
+    background: rgba(255,255,255,0.06);
+    color: var(--color-text-tertiary);
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>♪ 品牌区设计风格对比</h1>
+  <p class="subtitle">导航栏左侧品牌区 · 四种风格</p>
+
+  <!-- 风格 A -->
+  <div class="style-section">
+    <div class="style-header">
+      <div class="style-name">风格 A · 动画音符 + 文字</div>
+      <span class="style-tag">推荐</span>
+    </div>
+    <div class="style-desc">
+      圆角方形渐变图标内嵌音符 SVG，静态时轻微浮动，播放时旋转。<strong>记忆点强，但不过分张扬。</strong>
+    </div>
+    <div class="nav-mock">
+      <div class="brand-a">
+        <div class="brand-a-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+          </svg>
+        </div>
+        <div class="brand-a-text">音乐<span class="accent">盒子</span></div>
+      </div>
+      <div class="nav-tabs-mock">
+        <span class="active">播放</span><span>收藏</span><span>最近</span>
+      </div>
+    </div>
+    <div class="nav-mock">
+      <div class="brand-a playing">
+        <div class="brand-a-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+          </svg>
+        </div>
+        <div class="brand-a-text">音乐<span class="accent">盒子</span></div>
+      </div>
+      <div class="nav-tabs-mock">
+        <span class="active">播放</span><span>收藏</span><span>最近</span>
+      </div>
+      <span class="state-label">播放中（旋转）</span>
+    </div>
+  </div>
+
+  <!-- 风格 B -->
+  <div class="style-section">
+    <div class="style-header">
+      <div class="style-name">风格 B · 几何同心圆标识</div>
+      <span class="style-tag">克制 · 静态</span>
+    </div>
+    <div class="style-desc">
+      双层同心圆 + 中心点，象征"星核"。完全静态，<strong>极简、不抢戏，但缺少动效记忆点</strong>。
+    </div>
+    <div class="nav-mock">
+      <div class="brand-b">
+        <div class="brand-b-icon"></div>
+        <div class="brand-b-text">音乐盒子</div>
+      </div>
+      <div class="nav-tabs-mock">
+        <span class="active">播放</span><span>收藏</span><span>最近</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 风格 C -->
+  <div class="style-section">
+    <div class="style-header">
+      <div class="style-name">风格 C · 渐变文字品牌</div>
+      <span class="style-tag">极简 · 文字为主</span>
+    </div>
+    <div class="style-desc">
+      纯文字「音乐盒子」+ 渐变色（紫→粉）+ 微发光，无图标。<strong>最简洁，但识别度低</strong>。
+    </div>
+    <div class="nav-mock">
+      <div class="brand-c">
+        <div class="brand-c-text">音乐盒子<span class="small">MUSIC BOX</span></div>
+      </div>
+      <div class="nav-tabs-mock">
+        <span class="active">播放</span><span>收藏</span><span>最近</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 风格 D -->
+  <div class="style-section">
+    <div class="style-header">
+      <div class="style-name">风格 D · 星轨环抽象图形</div>
+      <span class="style-tag">艺术 · 高原创</span>
+    </div>
+    <div class="style-desc">
+      原创星轨图形：椭圆轨道 + 行星 + 中心恒星，缓慢旋转。无文字。<strong>最有艺术感，但需要适应识别</strong>。
+    </div>
+    <div class="nav-mock">
+      <div class="brand-d">
+        <div class="brand-d-icon">
+          <svg viewBox="0 0 32 32">
+            <ellipse class="orbit" cx="16" cy="16" rx="14" ry="6"/>
+            <ellipse class="orbit" cx="16" cy="16" rx="6" ry="14"/>
+            <circle class="planet" cx="30" cy="16" r="2"/>
+            <circle class="core" cx="16" cy="16" r="3"/>
+          </svg>
+        </div>
+        <div class="brand-a-text">音乐<span class="accent">盒子</span></div>
+      </div>
+      <div class="nav-tabs-mock">
+        <span class="active">播放</span><span>收藏</span><span>最近</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hint">
+    <strong>建议：</strong>风格 A（动画音符 + 文字），原因：<br>
+    • 圆角方形 + 音符图形明确传达"音乐"主题<br>
+    • 浮动/旋转动画与"播放/暂停"状态联动，增加生命感<br>
+    • 渐变背景与主色一致，与玻璃质感导航栏融合<br>
+    • 「音乐盒子」中"盒子"二字用主色高亮，强化品牌识别<br>
+    • 不会过于浮夸，比风格 D 更易识别，比风格 B/C 更有记忆点
+  </div>
+</div>
+</body>
+</html>

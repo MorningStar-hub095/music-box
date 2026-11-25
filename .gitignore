@@ -1,0 +1,176 @@
+# 构建输出（仅根目录的 VS 构建产物；desktop/build 存放打包图标，必须入库）
+/build/
+/x64/
+/Debug/
+/Release/
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.ipch
+*.tlog
+*.idb
+*.pdb
+*.ilk
+*.obj
+*.exe
+*.log
+*.enc
+
+# 第三方依赖
+third_party/gtest/googletest/
+
+# IDE
+.idea/
+.vscode/
+
+# Visual Studio 临时文件
+*.aps
+*.opensdf
+*.sdf
+*.cachefile
+*.VC.db
+*.VC.opendb
+
+# 项目文档生成产物
+docs/_build/
+
+# Node.js
+node_modules/
+dist/
+/logs/
+server/logs/
+.env
+.env.production
+server/.env
+*.log
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 运行时音频缓存与本地音乐文件（体积大，禁止入库）
+data/audio-cache/
+music/
+music_box_data/
+
+# 根目录运行时数据（前导斜杠限定根目录，避免误伤 web/src/data、mini-app/src/data 等源码目录）
+/data/
+/assets/
+
+# 爬虫/搜索等工具生成的临时结果文件
+tools/*.txt
+# requirements.txt 是 Python 依赖清单，需保留跟踪
+!tools/requirements.txt
+*.dat
+
+# Trae AI 内部目录
+.pai/
+
+# 桌面安装包构建产物
+MusicBox-Launcher-Setup/
+
+# 旧缓存目录与 TypeScript 构建缓存
+server/data/
+*.tsbuildinfo
+
+# Vite 构建临时文件
+web/vite.config.ts.timestamp-*.mjs
+
+# 爬虫运行状态
+tools/.crawl_state.json
+
+# 根目录临时/调试/导出文件
+commons_results.txt
+simple_test.txt
+test_write.txt
+start.txt
+status.txt
+done.txt
+优化内容.txt
+背景文件/
+
+# 误放行的 Python site-packages 残留
+scripts/site-packages/
+
+# 从 web/public/audio 迁出的历史测试音频（35MB，不再随前端构建分发）
+data/web-public-audio-backup/
+
+# ---- 桌面端打包暂存与产物（stage.js / electron-builder 生成）----
+desktop/app/
+desktop/release/
+/release/
+_install_test/
+
+# ---- WorkBuddy 工作台数据与本地产出（不入库）----
+.workbuddy/
+/output/
+.trae/
+project-full-summary.docx
+
+# ---- 版权/隐私敏感内容（发布审计 2026-11-03，仅保留本地、禁止公开）----
+# 爬取的曲库数据：含完整歌词（版权内容）与已过期的网易云临时直链
+shared/tracks.json
+shared/tracks_crawled.json
+# 数据库快照：含用户账号哈希等隐私数据 / 65MB 二进制；桌面打包时本地重新生成
+desktop/resources/db/pgdata.zip
+desktop/resources/db/seed.sql
+# 爬取的专辑封面图（无代码引用；前导斜杠限定根目录，避免误伤 server/src/modules/cover 源码）
+/cover/
+# SWC 构建缓存二进制
+mini-app/.swc/
+# AI 技能库（含第三方开源技能，未附带许可证文件，不随产品仓库发布）
+skills/
+
+# 自有版权曲库音频（本地保留；随仓库发布的只有 README 与清单模板）
+local-music/*
+!local-music/README.md
+!local-music/library.json.example
+
+# ---- 个人面试准备材料与内部审计报告（不随开源仓库发布）----
+docs/面试材料/
+docs/项目全面检查报告*.md
+docs/GitHub发布方案.md
+面试问答准备.md
+技术问答整理.md
+技术问答整理.docx
+
+# ---- 发布审计补充（2026-11-25）----
+# 部署/打包临时目录与历史版本包
+deploy-tmp/
+deploy-tmp-*/
+MusicBox-*/
+部署包-*/
+报告插图/
+desktop/release-new/
+desktop/release-pkg/
+desktop/release2/
+server/output/
+# 音频数据与未引用素材（根目录 /data/ /assets/ 已在前文锚定定义，此处不再重复）
+# 爬取曲库数据备份（版权敏感，同 tracks.json）
+shared/tracks.json.bak-*
+# 遗留 MySQL 工具（项目已迁移 PostgreSQL，仅本地保留）
+scripts/reset_mysql_password.sql
+# 根目录个人/课程材料（不随开源仓库发布）
+面试稿-*.md
+面试知识点*.md
+分析和设计报告-*.docx
+软件工程实践课程任务书-*.docx
+推荐算法模块分析报告.md
+recommendation-algorithm.docx
+recommendation-algorithm.pdf
+# docs 内部运维/审计记录与二进制重复文档
+docs/恢复后待重下载清单.json
+docs/音频清理执行记录*
+docs/曲库数据核查报告*
+docs/音频资源审计报告*
+docs/music-box-architecture.docx
+docs/music-box-architecture.pdf

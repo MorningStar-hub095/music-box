@@ -1,0 +1,10 @@
+[
+  {
+    "id": "local-001",
+    "title": "示例曲目（替换为真实信息）",
+    "artist": "示例歌手",
+    "album": "示例专辑",
+    "file": "example.mp3",
+    "coverColor": "#17C3B2"
+  }
+]

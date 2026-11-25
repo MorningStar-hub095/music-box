@@ -1,0 +1,29 @@
+# ============================================================
+# Music Box - 本地开发专用 Docker 配置
+# 仅启动 PostgreSQL（缓存层已迁为进程内 Map，无需 Redis）
+# API 和前端在宿主机原生运行
+# 用法: docker compose -f docker-compose.dev.yml up -d
+# 注意: 数据库与 server/prisma/schema.prisma 的 provider (postgresql) 保持一致
+# ============================================================
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: music-box-postgres-dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: music_box
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d music_box"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  postgres_dev_data:

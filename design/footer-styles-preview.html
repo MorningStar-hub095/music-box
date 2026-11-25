@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>底部控制栏风格 - Midnight Galaxy</title>
+<style>
+  :root {
+    --color-primary: #6366F1;
+    --color-primary-light: #818CF8;
+    --color-primary-dark: #4F46E5;
+    --color-primary-glow: rgba(99, 102, 241, 0.4);
+    --color-bg-page: #080B1A;
+    --color-bg-card: #0F1228;
+    --color-bg-hover: #1A1D3A;
+    --color-text-primary: #F8FAFC;
+    --color-text-secondary: #94A3B8;
+    --color-text-tertiary: #475569;
+    --color-favorite: #F472B6;
+    --glass-bg: rgba(26, 29, 58, 0.4);
+    --glass-bg-hover: rgba(26, 29, 58, 0.6);
+    --glass-border: rgba(255, 255, 255, 0.06);
+    --glass-border-hover: rgba(255, 255, 255, 0.12);
+    --glass-blur: 24px;
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--color-bg-page);
+    color: var(--color-text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    min-height: 100vh;
+    padding: 40px 20px;
+    background-image:
+      radial-gradient(ellipse at top, rgba(99, 102, 241, 0.08) 0%, transparent 60%);
+  }
+  .container { max-width: 1000px; margin: 0 auto; }
+  h1 { font-size: 22px; color: var(--color-primary-light); text-align: center; margin-bottom: 6px; text-shadow: 0 0 16px var(--color-primary-glow); }
+  .subtitle { text-align: center; color: var(--color-text-secondary); font-size: 13px; margin-bottom: 36px; }
+
+  .style-section { margin-bottom: 32px; }
+  .style-header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 10px; padding-left: 4px; }
+  .style-name { font-size: 16px; font-weight: 600; color: var(--color-text-primary); }
+  .style-tag { font-size: 10px; padding: 2px 8px; border-radius: 4px; background: rgba(99, 102, 241, 0.15); color: var(--color-primary-light); border: 1px solid rgba(99, 102, 241, 0.3); }
+  .style-desc { color: var(--color-text-secondary); font-size: 12px; margin-bottom: 14px; padding-left: 4px; line-height: 1.5; }
+
+  /* 模拟 footer */
+  .footer-mock {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 14px 24px;
+    box-shadow: 0 -4px 24px rgba(0,0,0,0.3);
+  }
+
+  /* 公用 */
+  .progress-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .time-text { font-size: 11px; color: var(--color-text-tertiary); min-width: 36px; text-align: center; font-variant-numeric: tabular-nums; }
+  .slider-track {
+    flex: 1;
+    height: 4px;
+    background: var(--color-bg-hover);
+    border-radius: 999px;
+    position: relative;
+    cursor: pointer;
+  }
+  .slider-track .progress {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 38%;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light));
+    border-radius: 999px;
+    box-shadow: 0 0 8px var(--color-primary-glow);
+  }
+  .slider-track .thumb {
+    position: absolute;
+    left: 38%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 0 2px var(--color-primary), 0 0 12px var(--color-primary-glow);
+  }
+
+  .control-row { display: flex; align-items: center; justify-content: space-between; }
+
+  .btn {
+    border-radius: 999px;
+    border: 1px solid var(--glass-border);
+    background: var(--glass-bg);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+  .btn:hover {
+    background: var(--glass-bg-hover);
+    color: var(--color-primary-light);
+    border-color: var(--glass-border-hover);
+    box-shadow: 0 0 12px var(--color-primary-glow);
+    transform: translateY(-1px);
+  }
+  .btn svg { width: 16px; height: 16px; fill: currentColor; }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+    border: none;
+    color: #fff;
+    box-shadow: 0 4px 20px var(--color-primary-glow);
+  }
+  .btn-primary:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 30px var(--color-primary-glow);
+  }
+  .btn-primary svg { width: 20px; height: 20px; }
+
+  .mode-btn {
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all 0.25s;
+    min-width: 90px;
+  }
+  .mode-btn:hover {
+    color: var(--color-primary-light);
+    background: var(--glass-bg-hover);
+    border-color: var(--glass-border-hover);
+  }
+  .mode-btn svg { width: 12px; height: 12px; fill: currentColor; }
+
+  /* ============ 风格 A: 经典三段式 ============ */
+  .footer-a .control-row { gap: 16px; }
+  .footer-a .main-controls { display: flex; align-items: center; gap: 8px; }
+  .footer-a .ctrl-btn { width: 36px; height: 36px; }
+  .footer-a .play-btn { width: 44px; height: 44px; }
+  .footer-a .volume-control { display: flex; align-items: center; gap: 4px; min-width: 90px; justify-content: flex-end; }
+  .footer-a .vol-slider {
+    width: 60px; height: 3px;
+    background: var(--color-bg-hover);
+    border-radius: 999px;
+    position: relative;
+  }
+  .footer-a .vol-slider .vol-fill {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 70%;
+    background: var(--color-primary-light);
+    border-radius: 999px;
+  }
+
+  /* ============ 风格 B: 紧凑中间式 ============ */
+  .footer-b .control-row { gap: 8px; }
+  .footer-b .left-zone, .footer-b .right-zone {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .footer-b .right-zone { justify-content: flex-end; }
+  .footer-b .main-controls { display: flex; align-items: center; gap: 12px; }
+  .footer-b .ctrl-btn { width: 34px; height: 34px; }
+  .footer-b .play-btn { width: 48px; height: 48px; }
+  .footer-b .vol-icon { width: 30px; height: 30px; }
+  .footer-b .vol-slider {
+    width: 80px; height: 3px;
+    background: var(--color-bg-hover);
+    border-radius: 999px;
+    position: relative;
+  }
+  .footer-b .vol-slider .vol-fill {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 70%;
+    background: var(--color-primary-light);
+    border-radius: 999px;
+  }
+  .footer-b .track-mini {
+    display: flex; align-items: center; gap: 8px;
+    padding: 4px 8px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 8px;
+    border: 1px solid var(--glass-border);
+    max-width: 200px;
+  }
+  .footer-b .track-mini-cover {
+    width: 28px; height: 28px;
+    border-radius: 6px;
+    background: linear-gradient(135deg, var(--color-primary), #4F46E5);
+    flex-shrink: 0;
+  }
+  .footer-b .track-mini-info { font-size: 11px; min-width: 0; }
+  .footer-b .track-mini-title { color: var(--color-text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .footer-b .track-mini-artist { color: var(--color-text-tertiary); font-size: 10px; }
+
+  /* ============ 风格 C: 极简两段式 ============ */
+  .footer-c .progress-row { margin-bottom: 8px; }
+  .footer-c .control-row { gap: 8px; justify-content: center; }
+  .footer-c .main-controls { display: flex; align-items: center; gap: 16px; }
+  .footer-c .ctrl-btn { width: 32px; height: 32px; border: none; background: transparent; }
+  .footer-c .ctrl-btn:hover { background: var(--glass-bg); transform: none; }
+  .footer-c .play-btn { width: 40px; height: 40px; }
+  .footer-c .secondary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--glass-border);
+  }
+  .footer-c .secondary-row .left, .footer-c .secondary-row .right {
+    display: flex; gap: 4px; align-items: center;
+  }
+  .footer-c .vol-slider { width: 60px; height: 3px; background: var(--color-bg-hover); border-radius: 999px; position: relative; }
+  .footer-c .vol-slider .vol-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 70%; background: var(--color-primary-light); border-radius: 999px; }
+  .footer-c .small-btn { width: 26px; height: 26px; border-radius: 6px; background: transparent; border: none; color: var(--color-text-tertiary); cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .footer-c .small-btn:hover { color: var(--color-primary-light); background: var(--glass-bg); }
+  .footer-c .small-btn svg { width: 12px; height: 12px; fill: currentColor; }
+
+  .hint { margin-top: 24px; padding: 16px 20px; background: rgba(99, 102, 241, 0.08); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 10px; font-size: 12px; color: var(--color-text-secondary); line-height: 1.7; }
+  .hint strong { color: var(--color-primary-light); }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>♪ 底部控制栏风格对比</h1>
+  <p class="subtitle">进度条 + 主控制按钮 + 模式/音量 · 三种布局</p>
+
+  <!-- 风格 A: 经典三段式 -->
+  <div class="style-section">
+    <div class="style-header">
+      <div class="style-name">风格 A · 经典三段式</div>
+      <span class="style-tag">当前升级 · 平衡</span>
+    </div>
+    <div class="style-desc">
+      上行进度条 + 下行三段：左模式按钮 / 中主控制 / 右音量。<strong>沿用现有结构，仅升级按钮视觉</strong>。
+    </div>
+    <div class="footer-mock footer-a">
+      <div class="progress-row">
+        <span class="time-text">01:23</span>
+        <div class="slider-track"><div class="progress"></div><div class="thumb"></div></div>
+        <span class="time-text">03:45</span>
+      </div>
+      <div class="control-row">
+        <button class="mode-btn">
+          <svg viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
+          <span>顺序播放</span>
+        </button>
+        <div class="main-controls">
+          <button class="btn ctrl-btn"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg></button>
+          <button class="btn btn-primary play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+          <button class="btn ctrl-btn"><svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg></button>
+        </div>
+        <div class="volume-control">
+          <button class="btn" style="width:30px;height:30px"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg></button>
+          <div class="vol-slider"><div class="vol-fill"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 风格 B: 紧凑中间式 -->
+  <div class="style-section">
+    <div class="style-header">
+      <div class="style-name">风格 B · 紧凑中间式 + 曲目卡</div>
+      <span class="style-tag">信息更丰富</span>
+    </div>
+    <div class="style-desc">
+      左侧显示当前曲目迷你卡片，中间主控制放大，右侧音量/模式。<strong>底部信息更丰富，但视觉密度更高</strong>。
+    </div>
+    <div class="footer-mock footer-b">
+      <div class="progress-row">
+        <span class="time-text">01:23</span>
+        <div class="slider-track"><div class="progress"></div><div class="thumb"></div></div>
+        <span class="time-text">03:45</span>
+      </div>
+      <div class="control-row">
+        <div class="left-zone">
+          <div class="track-mini">
+            <div class="track-mini-cover"></div>
+            <div class="track-mini-info">
+              <div class="track-mini-title">晴天</div>
+              <div class="track-mini-artist">周杰伦</div>
+            </div>
+          </div>
+        </div>
+        <div class="main-controls">
+          <button class="btn ctrl-btn"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg></button>
+          <button class="btn btn-primary play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+          <button class="btn ctrl-btn"><svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg></button>
+        </div>
+        <div class="right-zone">
+          <button class="mode-btn" style="min-width:auto"><svg viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5z"/></svg></button>
+          <button class="btn vol-icon"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3z"/></svg></button>
+          <div class="vol-slider"><div class="vol-fill"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 风格 C: 极简两段式 -->
+  <div class="style-section">
+    <div class="style-header">
+      <div class="style-name">风格 C · 极简两段式</div>
+      <span class="style-tag">极简 · 主控制优先</span>
+    </div>
+    <div class="style-desc">
+      上行进度条 + 中行主控制（更大间距）+ 底行次要功能（模式/音量/收藏）。<strong>主控制最突出，次要功能折叠到底部</strong>。
+    </div>
+    <div class="footer-mock footer-c">
+      <div class="progress-row">
+        <span class="time-text">01:23</span>
+        <div class="slider-track"><div class="progress"></div><div class="thumb"></div></div>
+        <span class="time-text">03:45</span>
+      </div>
+      <div class="control-row">
+        <div class="main-controls">
+          <button class="btn ctrl-btn"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg></button>
+          <button class="btn btn-primary play-btn"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+          <button class="btn ctrl-btn"><svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg></button>
+        </div>
+      </div>
+      <div class="secondary-row">
+        <div class="left">
+          <button class="small-btn"><svg viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5z"/></svg></button>
+          <span style="font-size:10px; color:var(--color-text-tertiary);">顺序</span>
+        </div>
+        <div class="right">
+          <button class="small-btn"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3z"/></svg></button>
+          <div class="vol-slider"><div class="vol-fill"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hint">
+    <strong>建议：</strong>风格 A（经典三段式升级），原因：<br>
+    • 沿用现有结构，迁移成本最低，用户无需重新学习<br>
+    • 三段式布局视觉平衡：左模式 / 中主控制 / 右音量<br>
+    • 主控制按钮（48px）> 控制按钮（38px）> 模式/音量（30px），层次清晰<br>
+    • 进度条加入主色渐变填充 + 发光 thumb，比当前更精致<br>
+    • 比 B 更轻量（B 的曲目卡在底部冗余，主区已有）<br>
+    • 比 C 更直接（C 把模式/音量折叠到第二行，操作路径变长）
+  </div>
+</div>
+</body>
+</html>

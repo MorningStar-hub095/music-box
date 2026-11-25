@@ -1,0 +1,872 @@
+/* LoginPage.css - 登录/注册页面样式 */
+
+/* 基础变量 */
+:root {
+  --lp-bg: #0d0d1a;
+  --lp-card: #1a1a2e;
+  --lp-border: #2a2a4a;
+  --lp-primary: #17C3B2;
+  --lp-primary-hover: #14a89b;
+  --lp-primary-light: rgba(23, 195, 178, 0.15);
+  --lp-accent: #FBBF24;
+  --lp-text: #eeeeee;
+  --lp-text-sec: #888888;
+  --lp-text-muted: #666666;
+  --lp-error: #ef4444;
+  --lp-error-bg: rgba(239, 68, 68, 0.1);
+  --lp-success: #22c55e;
+  --lp-success-bg: rgba(34, 197, 94, 0.1);
+  --lp-input-bg: #12121f;
+  --lp-input-border: #3a3a5a;
+  --lp-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
+  --lp-radius-sm: 8px;
+  --lp-radius-md: 12px;
+  --lp-radius-lg: 16px;
+}
+
+/* 页面容器 */
+.lp-page {
+  min-height: 100vh;
+  min-height: 100dvh; /* 动态视口高度，处理移动端地址栏 */
+  background: var(--lp-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+/* 背景装饰 */
+.lp-page::before {
+  content: '';
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 30% 40%, rgba(23, 195, 178, 0.08) 0%, transparent 50%),
+              radial-gradient(circle at 70% 60%, rgba(251, 191, 36, 0.06) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* 卡片容器 */
+.lp-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 440px;
+  background: var(--lp-card);
+  border-radius: var(--lp-radius-lg);
+  border: 1px solid var(--lp-border);
+  padding: 40px 36px;
+  box-shadow: var(--lp-shadow);
+  animation: lp-fadeIn 0.4s ease-out;
+}
+
+@keyframes lp-fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Logo 区域 */
+.lp-logo {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.lp-logo-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, var(--lp-primary), var(--lp-accent));
+  border-radius: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 20px rgba(23, 195, 178, 0.3);
+  transition: transform 0.3s ease;
+}
+
+.lp-logo-icon:hover {
+  transform: scale(1.05) rotate(5deg);
+}
+
+.lp-logo-icon svg {
+  width: 30px;
+  height: 30px;
+}
+
+.lp-logo h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--lp-text);
+  letter-spacing: 0.5px;
+}
+
+.lp-logo p {
+  margin: 8px 0 0;
+  font-size: 14px;
+  color: var(--lp-text-muted);
+  line-height: 1.4;
+}
+
+/* Tab 切换 */
+.lp-tabs {
+  display: flex;
+  background: var(--lp-input-bg);
+  border-radius: 10px;
+  padding: 4px;
+  margin-bottom: 28px;
+  position: relative;
+}
+
+.lp-tab {
+  flex: 1;
+  padding: 11px 0;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: var(--lp-text-muted);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.lp-tab:hover {
+  color: var(--lp-text-sec);
+}
+
+.lp-tab--active {
+  color: var(--lp-text);
+  font-weight: 600;
+  background: var(--lp-card);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 消息提示 */
+.lp-message {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: var(--lp-radius-sm);
+  margin-bottom: 20px;
+  font-size: 13px;
+  line-height: 1.4;
+  animation: lp-slideDown 0.3s ease;
+}
+
+@keyframes lp-slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.lp-message--error {
+  background: var(--lp-error-bg);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: var(--lp-error);
+}
+
+.lp-message--success {
+  background: var(--lp-success-bg);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  color: var(--lp-success);
+}
+
+.lp-message--warning {
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  color: #fbbf24;
+}
+
+.lp-message-icon {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+}
+
+.lp-message-text {
+  flex: 1;
+}
+
+.lp-message-close {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  padding: 2px;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.lp-message-close:hover {
+  opacity: 1;
+}
+
+/* 表单组 */
+.lp-form {
+  animation: lp-fadeIn 0.3s ease;
+}
+
+.lp-field {
+  margin-bottom: 20px;
+}
+
+.lp-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--lp-text-sec);
+}
+
+.lp-label-text {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.lp-label-hint {
+  font-size: 11px;
+  color: var(--lp-text-muted);
+  font-weight: 400;
+}
+
+/* 输入框容器 */
+.lp-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.lp-input {
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--lp-input-bg);
+  border: 1.5px solid var(--lp-input-border);
+  border-radius: var(--lp-radius-sm);
+  color: var(--lp-text);
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.lp-input::placeholder {
+  color: var(--lp-text-muted);
+  font-size: 13px;
+}
+
+.lp-input:focus {
+  border-color: var(--lp-primary);
+  background: rgba(18, 18, 31, 0.8);
+  box-shadow: 0 0 0 3px var(--lp-primary-light);
+}
+
+.lp-input:invalid:not(:placeholder-shown) {
+  border-color: var(--lp-error);
+}
+
+/* 密码显示/隐藏按钮 */
+.lp-input-toggle {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  color: var(--lp-text-muted);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.lp-input-toggle:hover {
+  color: var(--lp-text-sec);
+}
+
+.lp-input-toggle svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* 下拉选择框 */
+.lp-select {
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--lp-input-bg);
+  border: 1.5px solid var(--lp-input-border);
+  border-radius: var(--lp-radius-sm);
+  color: var(--lp-text);
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+}
+
+.lp-select:focus {
+  border-color: var(--lp-primary);
+  box-shadow: 0 0 0 3px var(--lp-primary-light);
+}
+
+.lp-select option {
+  background: var(--lp-card);
+  color: var(--lp-text);
+}
+
+/* 表单验证提示 */
+.lp-field-error {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--lp-error);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  animation: lp-slideDown 0.2s ease;
+}
+
+.lp-field-error svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+/* 密码强度指示器 */
+.lp-password-strength {
+  margin-top: 8px;
+  display: flex;
+  gap: 4px;
+}
+
+.lp-password-strength-bar {
+  flex: 1;
+  height: 3px;
+  background: var(--lp-border);
+  border-radius: 2px;
+  transition: background 0.3s ease;
+}
+
+.lp-password-strength-bar--weak {
+  background: var(--lp-error);
+}
+
+.lp-password-strength-bar--medium {
+  background: var(--lp-accent);
+}
+
+.lp-password-strength-bar--strong {
+  background: var(--lp-success);
+}
+
+.lp-password-strength-text {
+  margin-top: 4px;
+  font-size: 11px;
+  color: var(--lp-text-muted);
+}
+
+/* 主按钮 */
+.lp-btn-primary {
+  width: 100%;
+  padding: 13px 0;
+  background: var(--lp-primary);
+  border: none;
+  border-radius: var(--lp-radius-sm);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: inherit;
+  letter-spacing: 0.3px;
+}
+
+.lp-btn-primary:hover:not(:disabled) {
+  background: var(--lp-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(23, 195, 178, 0.3);
+}
+
+.lp-btn-primary:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.lp-btn-primary:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Loading spinner */
+.lp-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: lp-spin 0.6s linear infinite;
+}
+
+@keyframes lp-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 分隔线 */
+.lp-divider {
+  display: flex;
+  align-items: center;
+  margin: 28px 0;
+  gap: 16px;
+}
+
+.lp-divider-line {
+  flex: 1;
+  height: 1px;
+  background: var(--lp-border);
+}
+
+.lp-divider-text {
+  color: var(--lp-text-muted);
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* 幽灵按钮 */
+.lp-btn-ghost {
+  width: 100%;
+  padding: 13px 0;
+  background: transparent;
+  border: 1.5px solid var(--lp-border);
+  border-radius: var(--lp-radius-sm);
+  color: var(--lp-text-sec);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: inherit;
+}
+
+.lp-btn-ghost:hover:not(:disabled) {
+  border-color: var(--lp-text-muted);
+  color: var(--lp-text);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.lp-btn-ghost:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.lp-btn-ghost svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* 底部提示 */
+.lp-footer {
+  text-align: center;
+  margin-top: 16px;
+}
+
+.lp-footer-text {
+  font-size: 12px;
+  color: var(--lp-text-muted);
+  line-height: 1.5;
+}
+
+/* 帮助链接 */
+.lp-help-links {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--lp-border);
+}
+
+.lp-help-link {
+  background: none;
+  border: none;
+  color: var(--lp-text-muted);
+  font-size: 12px;
+  cursor: pointer;
+  transition: color 0.2s;
+  font-family: inherit;
+  text-decoration: none;
+}
+
+.lp-help-link:hover {
+  color: var(--lp-primary);
+}
+
+/* 密码找回模态框 */
+.lp-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  animation: lp-fadeIn 0.2s ease;
+}
+
+.lp-modal {
+  width: 100%;
+  max-width: 400px;
+  background: var(--lp-card);
+  border-radius: var(--lp-radius-lg);
+  border: 1px solid var(--lp-border);
+  padding: 32px;
+  box-shadow: var(--lp-shadow);
+  animation: lp-modalIn 0.3s ease;
+}
+
+@keyframes lp-modalIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.lp-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.lp-modal-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--lp-text);
+  margin: 0;
+}
+
+.lp-modal-close {
+  background: none;
+  border: none;
+  color: var(--lp-text-muted);
+  cursor: pointer;
+  padding: 4px;
+  transition: color 0.2s;
+  display: flex;
+}
+
+.lp-modal-close:hover {
+  color: var(--lp-text);
+}
+
+.lp-modal-close svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* 步骤指示器 */
+.lp-steps {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.lp-step {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--lp-border);
+  transition: all 0.3s ease;
+}
+
+.lp-step--active {
+  background: var(--lp-primary);
+  width: 24px;
+  border-radius: 4px;
+}
+
+.lp-step--done {
+  background: var(--lp-success);
+}
+
+/* 响应式设计 */
+@media (max-width: 480px) {
+  .lp-page {
+    padding: 16px 12px;
+    align-items: flex-start;
+    padding-top: 40px;
+  }
+
+  .lp-card {
+    padding: 28px 20px;
+    border-radius: 12px;
+    max-width: 100%;
+  }
+
+  .lp-logo {
+    margin-bottom: 24px;
+  }
+
+  .lp-logo h1 {
+    font-size: 20px;
+  }
+
+  .lp-logo-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+  }
+
+  .lp-logo-icon svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .lp-tabs {
+    margin-bottom: 24px;
+  }
+
+  .lp-tab {
+    padding: 10px 0;
+    font-size: 13px;
+  }
+
+  .lp-field {
+    margin-bottom: 16px;
+  }
+
+  .lp-input {
+    padding: 11px 12px;
+    font-size: 13px;
+  }
+
+  .lp-select {
+    padding: 11px 12px;
+    font-size: 13px;
+  }
+
+  .lp-label {
+    font-size: 12px;
+    margin-bottom: 6px;
+  }
+
+  .lp-btn-primary,
+  .lp-btn-ghost {
+    padding: 12px 0;
+    font-size: 14px;
+  }
+
+  .lp-divider {
+    margin: 20px 0;
+  }
+
+  .lp-help-links {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .lp-modal {
+    padding: 24px 20px;
+    margin: 16px;
+  }
+}
+
+@media (max-width: 360px) {
+  .lp-page {
+    padding: 12px 8px;
+    padding-top: 24px;
+  }
+
+  .lp-card {
+    padding: 24px 16px;
+    border-radius: 10px;
+  }
+
+  .lp-logo {
+    margin-bottom: 20px;
+  }
+
+  .lp-logo-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+  }
+
+  .lp-logo-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .lp-logo h1 {
+    font-size: 18px;
+  }
+
+  .lp-logo p {
+    font-size: 12px;
+  }
+
+  .lp-tabs {
+    margin-bottom: 20px;
+    padding: 3px;
+  }
+
+  .lp-tab {
+    padding: 9px 0;
+    font-size: 12px;
+  }
+
+  .lp-field {
+    margin-bottom: 14px;
+  }
+
+  .lp-input,
+  .lp-select {
+    padding: 10px 10px;
+    font-size: 12px;
+    border-radius: 6px;
+  }
+
+  .lp-label {
+    font-size: 11px;
+    margin-bottom: 5px;
+  }
+
+  .lp-label-hint {
+    font-size: 10px;
+  }
+
+  .lp-btn-primary,
+  .lp-btn-ghost {
+    padding: 11px 0;
+    font-size: 13px;
+    border-radius: 6px;
+  }
+
+  .lp-message {
+    padding: 10px 12px;
+    font-size: 12px;
+    border-radius: 6px;
+  }
+
+  .lp-divider {
+    margin: 16px 0;
+  }
+
+  .lp-footer-text {
+    font-size: 11px;
+  }
+
+  .lp-help-links {
+    padding-top: 16px;
+    margin-top: 16px;
+  }
+
+  .lp-help-link {
+    font-size: 11px;
+  }
+}
+
+/* 深色模式下的滚动条 */
+.lp-page ::-webkit-scrollbar {
+  width: 6px;
+}
+
+.lp-page ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.lp-page ::-webkit-scrollbar-thumb {
+  background: var(--lp-border);
+  border-radius: 3px;
+}
+
+.lp-page ::-webkit-scrollbar-thumb:hover {
+  background: var(--lp-text-muted);
+}
+
+/* 焦点可见性（无障碍） */
+.lp-input:focus-visible,
+.lp-select:focus-visible,
+.lp-btn-primary:focus-visible,
+.lp-btn-ghost:focus-visible,
+.lp-tab:focus-visible {
+  outline: 2px solid var(--lp-primary);
+  outline-offset: 2px;
+}
+
+/* 高对比度模式支持 */
+@media (forced-colors: active) {
+  .lp-input,
+  .lp-select {
+    border: 2px solid ButtonText;
+  }
+
+  .lp-btn-primary {
+    border: 2px solid ButtonText;
+  }
+}
+
+/* 减少动画（无障碍） */
+@media (prefers-reduced-motion: reduce) {
+  .lp-card,
+  .lp-message,
+  .lp-form,
+  .lp-modal,
+  .lp-step,
+  .lp-input,
+  .lp-btn-primary,
+  .lp-btn-ghost {
+    animation: none;
+    transition: none;
+  }
+}

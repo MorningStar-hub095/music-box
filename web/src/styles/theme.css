@@ -1,0 +1,226 @@
+:root {
+  /* ===== Midnight Galaxy 色彩体系 ===== */
+  --color-primary: #6366F1;
+  --color-primary-light: #818CF8;
+  --color-primary-dark: #4F46E5;
+  --color-primary-glow: rgba(99, 102, 241, 0.4);
+  --color-primary-soft: rgba(99, 102, 241, 0.12);
+
+  /* 深空背景 */
+  --color-bg-page: #080B1A;
+  --color-bg-card: #0F1228;
+  --color-bg-hover: #1A1D3A;
+
+  /* 文字 - 深色模式下使用白色系 */
+  --color-text-primary: #F8FAFC;
+  --color-text-secondary: #94A3B8;
+  --color-text-tertiary: rgba(255, 255, 255, 0.5);
+
+  /* 边框 */
+  --color-border: #1E2238;
+  --color-divider: #15182E;
+
+  /* 点缀 */
+  --color-highlight: #FBBF24;
+  --color-favorite: #F472B6;
+
+  /* 间距 */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 24px;
+  --spacing-2xl: 32px;
+
+  /* 圆角 */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 24px;
+  --radius-round: 999px;
+
+  /* 阴影 */
+  --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.4);
+  --shadow-popup: 0 8px 32px rgba(0, 0, 0, 0.6);
+
+  /* 过渡 */
+  --transition-base: 0.25s ease;
+  --transition-smooth: 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-star: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* 玻璃星云 */
+  --glass-bg: rgba(26, 29, 58, 0.4);
+  --glass-bg-hover: rgba(26, 29, 58, 0.6);
+  --glass-bg-active: rgba(26, 29, 58, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.06);
+  --glass-border-hover: rgba(255, 255, 255, 0.12);
+  --glass-blur: 24px;
+  --glass-blur-heavy: 40px;
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+
+  /* 星轨歌词 */
+  --star-active-color: #FBBF24;
+  --star-active-glow: 0 0 20px rgba(251, 191, 36, 0.4), 0 0 40px rgba(251, 191, 36, 0.15);
+  --star-near-color: #94A3B8;
+  --star-far-color: #475569;
+  --star-blur-near: 0px;
+  --star-blur-mid: 2px;
+  --star-blur-far: 5px;
+  --star-opacity-active: 1;
+  --star-opacity-near: 0.6;
+  --star-opacity-mid: 0.35;
+  --star-opacity-far: 0.15;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body, #root { height: 100%; width: 100%; }
+
+body {
+  font-family: "KaiTi", "STKaiti", "楷体", -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', serif;
+  background: var(--color-bg-page);
+  color: var(--color-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+}
+
+button { border: none; background: none; cursor: pointer; font-family: inherit; color: inherit; }
+ul { list-style: none; }
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-text-tertiary); }
+
+/* ===== 赛博朋克主题 ===== */
+[data-preset="cyberpunk"] {
+  --glass-blur: 12px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --shadow-card: 0 0 15px rgba(0, 240, 255, 0.15), 0 2px 12px rgba(0, 0, 0, 0.6);
+  --shadow-popup: 0 0 30px rgba(0, 240, 255, 0.2), 0 8px 32px rgba(0, 0, 0, 0.7);
+  --transition-base: 0.15s ease-in-out;
+  --transition-smooth: 0.2s ease-in-out;
+  --color-favorite: #FF00AA;
+}
+[data-preset="cyberpunk"] body {
+  font-family: 'Consolas', 'Courier New', 'Source Code Pro', monospace;
+}
+/* 扫描线叠加 */
+[data-preset="cyberpunk"] .app-container::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 240, 255, 0.015) 2px,
+    rgba(0, 240, 255, 0.015) 4px
+  );
+}
+/* 霓虹发光文字 */
+[data-preset="cyberpunk"] .player-title,
+[data-preset="cyberpunk"] .track-title {
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.6), 0 0 20px rgba(0, 240, 255, 0.3);
+}
+/* 霓虹边框卡片 */
+[data-preset="cyberpunk"] .glass-panel,
+[data-preset="cyberpunk"] .playlist-card {
+  border: 1px solid rgba(0, 240, 255, 0.15);
+  box-shadow: inset 0 0 20px rgba(0, 240, 255, 0.03);
+}
+
+/* ===== 极简现代主题 ===== */
+[data-preset="minimal"] {
+  --glass-blur: 0px;
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-bg-hover: rgba(255, 255, 255, 0.95);
+  --glass-border: rgba(0, 0, 0, 0.06);
+  --glass-border-hover: rgba(0, 0, 0, 0.1);
+  --glass-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-popup: 0 4px 16px rgba(0, 0, 0, 0.1);
+  --transition-smooth: 0.25s ease;
+}
+[data-preset="minimal"] body {
+  font-family: -apple-system, 'SF Pro Text', 'SF Pro Display', 'Helvetica Neue', 'PingFang SC',
+    'Microsoft YaHei', sans-serif;
+}
+[data-preset="minimal"] .glass-panel,
+[data-preset="minimal"] .playlist-card {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+[data-preset="minimal"][data-theme="dark"] {
+  --glass-bg: rgba(30, 30, 46, 0.85);
+  --glass-bg-hover: rgba(30, 30, 46, 0.95);
+  --glass-border: rgba(255, 255, 255, 0.06);
+  --glass-border-hover: rgba(255, 255, 255, 0.1);
+  --glass-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+[data-preset="minimal"][data-theme="dark"] .glass-panel,
+[data-preset="minimal"][data-theme="dark"] .playlist-card {
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* ===== 新拟态主题 ===== */
+[data-preset="neumorphism"] {
+  --glass-blur: 0px;
+  --glass-bg: transparent;
+  --glass-bg-hover: transparent;
+  --glass-border: transparent;
+  --glass-border-hover: transparent;
+  --glass-shadow: none;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 28px;
+  --transition-smooth: 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+[data-preset="neumorphism"] body {
+  font-family: 'Nunito', 'SF Pro Rounded', -apple-system, 'PingFang SC',
+    'Microsoft YaHei', sans-serif;
+}
+/* 凸起效果 */
+[data-preset="neumorphism"] .glass-panel,
+[data-preset="neumorphism"] .playlist-card,
+[data-preset="neumorphism"] .play-btn {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.15), -6px -6px 12px rgba(255, 255, 255, 0.7);
+  border: none;
+}
+[data-preset="neumorphism"] .play-btn:active,
+[data-preset="neumorphism"] .glass-panel:active {
+  box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.15), inset -4px -4px 8px rgba(255, 255, 255, 0.7);
+}
+[data-preset="neumorphism"][data-theme="dark"] .glass-panel,
+[data-preset="neumorphism"][data-theme="dark"] .playlist-card,
+[data-preset="neumorphism"][data-theme="dark"] .play-btn {
+  box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.4), -6px -6px 12px rgba(60, 60, 80, 0.3);
+}
+[data-preset="neumorphism"][data-theme="dark"] .play-btn:active,
+[data-preset="neumorphism"][data-theme="dark"] .glass-panel:active {
+  box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.4), inset -4px -4px 8px rgba(60, 60, 80, 0.3);
+}
+/* 凹陷输入框 */
+[data-preset="neumorphism"] input,
+[data-preset="neumorphism"] .search-input {
+  box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.12), inset -4px -4px 8px rgba(255, 255, 255, 0.6);
+  border: none;
+}
+[data-preset="neumorphism"][data-theme="dark"] input,
+[data-preset="neumorphism"][data-theme="dark"] .search-input {
+  box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.35), inset -4px -4px 8px rgba(60, 60, 80, 0.2);
+}

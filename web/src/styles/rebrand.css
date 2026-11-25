@@ -1,0 +1,216 @@
+/* ============================================================
+   rebrand.css — 全局视觉重塑（深色沉浸 + 玻璃拟态）
+   在 App.css 之后导入，覆盖旧皮肤。品牌与配色保持音乐盒子自有。
+   ============================================================ */
+
+/* ── 字体现代化：Mineradio 式干净无衬线 ── */
+body {
+  font-family: 'PingFang SC', 'MiSans', 'HarmonyOS Sans SC', -apple-system,
+    BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+  background: #05060F;
+}
+
+/* ── 顶栏：玻璃导航条 ── */
+.app .search-bar {
+  position: relative;
+  z-index: 950;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 14px 40px 6px;
+  padding: 10px 16px;
+  border-radius: var(--radius-round);
+  background: rgba(13, 16, 34, 0.66);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--glass-blur-heavy));
+  -webkit-backdrop-filter: blur(var(--glass-blur-heavy));
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
+}
+
+/* 品牌标识 */
+.app .nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-right: 8px;
+  flex-shrink: 0;
+  user-select: none;
+}
+.app .nav-brand-logo {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 14px;
+  color: #fff;
+  background: linear-gradient(135deg, #17C3B2, #4F46E5);
+  box-shadow: 0 4px 14px rgba(23, 195, 178, 0.4);
+}
+.app .nav-brand-name {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  background: linear-gradient(100deg, #F8FAFC, #17C3B2);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  white-space: nowrap;
+}
+
+/* 搜索输入区 */
+.app .search-input-wrap {
+  flex: 0 1 380px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-round);
+  transition: border-color var(--transition-base), background var(--transition-base);
+}
+.app .search-input-wrap:focus-within {
+  border-color: rgba(23, 195, 178, 0.5);
+  background: rgba(255, 255, 255, 0.07);
+}
+.app .search-input {
+  color: var(--color-text-primary);
+}
+
+/* 顶栏按钮统一为玻璃药丸 */
+.app .search-btn,
+.app .import-btn,
+.app .cache-trigger-btn {
+  height: 32px;
+  padding: 0 12px;
+  border-radius: var(--radius-round);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  transition: color var(--transition-base), border-color var(--transition-base),
+    background var(--transition-base), transform var(--transition-base);
+}
+.app .search-btn:hover,
+.app .import-btn:hover,
+.app .cache-trigger-btn:hover {
+  color: #fff;
+  border-color: var(--glass-border-hover);
+  background: rgba(255, 255, 255, 0.09);
+  transform: translateY(-1px);
+}
+.app .cache-trigger-btn.active {
+  color: #17C3B2;
+  border-color: rgba(23, 195, 178, 0.5);
+  background: rgba(23, 195, 178, 0.1);
+}
+
+/* 顶栏弹簧：把用户区推到最右 */
+.app .nav-spring { flex: 1; }
+
+/* ── 主内容区让位：首页自带滚动 ── */
+.app .main {
+  overflow: hidden;
+  padding: 0;
+}
+
+/* ── 弹层/模态统一玻璃化 ── */
+.app .playlist-manager-overlay {
+  background: rgba(4, 5, 14, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* ── 错误提示条玻璃化 ── */
+.app .error-bar {
+  border-radius: var(--radius-lg);
+  background: rgba(60, 18, 24, 0.8);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.app .error-bar.info {
+  background: rgba(13, 32, 48, 0.8);
+  border-color: rgba(56, 189, 248, 0.25);
+}
+
+/* ── 播放态（舞台）激活时隐藏迷你条由 App 控制；这里保证层级 ── */
+.app .stage-enter-hint {
+  position: fixed;
+  top: 74px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 890;
+  font-size: 11.5px;
+  letter-spacing: 0.1em;
+  color: var(--color-text-tertiary);
+  padding: 4px 14px;
+  border-radius: var(--radius-round);
+  background: rgba(13, 16, 34, 0.6);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  animation: stage-hint-fade 3.2s ease forwards;
+  pointer-events: none;
+}
+@keyframes stage-hint-fade {
+  0% { opacity: 0; transform: translate(-50%, -6px); }
+  12% { opacity: 1; transform: translate(-50%, 0); }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ============================================================
+   全局精修层：选区 / 滚动条 / 焦点环 / 顶栏边缘光 / 微交互
+   ============================================================ */
+
+/* 品牌色选区 */
+::selection {
+  background: rgba(23, 195, 178, 0.35);
+  color: #fff;
+}
+
+/* 统一细滚动条：悬浮加深 */
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: 99px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+*::-webkit-scrollbar-thumb:hover { background-color: rgba(255, 255, 255, 0.28); }
+
+/* 键盘焦点环（可访问性 + 精致感） */
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid rgba(23, 195, 178, 0.55);
+  outline-offset: 2px;
+}
+
+/* 顶栏：顶部边缘光 + 更有层次的双层投影 */
+.app .search-bar {
+  box-shadow:
+    0 18px 44px rgba(0, 0, 0, 0.45),
+    0 2px 8px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+.app .search-bar::after {
+  content: '';
+  position: absolute;
+  left: 22px;
+  right: 22px;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  pointer-events: none;
+}
+
+/* 品牌 Logo：呼吸辉光 */
+.app .nav-brand-logo {
+  animation: brand-logo-breathe 3.6s ease-in-out infinite;
+}
+@keyframes brand-logo-breathe {
+  0%, 100% { box-shadow: 0 4px 14px rgba(23, 195, 178, 0.4); }
+  50% { box-shadow: 0 4px 22px rgba(23, 195, 178, 0.65); }
+}

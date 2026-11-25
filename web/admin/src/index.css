@@ -1,0 +1,1576 @@
+/* ============ Reset & Base ============ */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  background: #1a1a1a;
+  color: #fff;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+}
+
+input, select {
+  font-family: inherit;
+}
+
+/* ============ Layout ============ */
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 240px;
+  background: #222;
+  border-right: 1px solid #333;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 100;
+}
+
+.sidebar-logo {
+  padding: 24px 20px;
+  border-bottom: 1px solid #333;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.logo-icon {
+  font-size: 28px;
+  margin-bottom: 4px;
+}
+
+.logo-text {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.logo-sub {
+  font-size: 12px;
+  color: #888;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 12px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  color: #aaa;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.nav-item:hover {
+  background: #2a2a2a;
+  color: #fff;
+}
+
+.nav-item.active {
+  background: #4CAF50;
+  color: #fff;
+}
+
+.nav-icon {
+  font-size: 18px;
+  width: 24px;
+  text-align: center;
+}
+
+.sidebar-footer {
+  padding: 16px;
+  border-top: 1px solid #333;
+}
+
+.logout-btn {
+  width: 100%;
+  padding: 10px;
+  background: #333;
+  color: #aaa;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.logout-btn:hover {
+  background: #c0392b;
+  color: #fff;
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  margin-left: 240px;
+  padding: 32px;
+  min-height: 100vh;
+}
+
+/* ============ Page Common ============ */
+.page-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: #fff;
+}
+
+.page-loading {
+  text-align: center;
+  padding: 60px 0;
+  color: #888;
+  font-size: 16px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 0;
+  color: #666;
+  font-size: 16px;
+}
+
+/* ============ Login Page ============ */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1a1a1a;
+}
+
+.login-card {
+  background: #2a2a2a;
+  border-radius: 16px;
+  padding: 48px 40px;
+  width: 400px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.login-icon {
+  font-size: 48px;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.login-header h1 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.login-header p {
+  color: #888;
+  font-size: 14px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 13px;
+  color: #aaa;
+  margin-bottom: 6px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 16px;
+  background: #1a1a1a;
+  border: 1px solid #444;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #4CAF50;
+}
+
+.error-message {
+  background: rgba(231, 76, 60, 0.15);
+  color: #e74c3c;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 14px;
+  background: #4CAF50;
+  color: #fff;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.login-btn:hover:not(:disabled) {
+  background: #43a047;
+}
+
+.login-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ============ Stats Page ============ */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.stat-card {
+  background: #2a2a2a;
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: transform 0.2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+}
+
+.stat-card.clickable {
+  cursor: pointer;
+}
+
+.stat-card.clickable:hover {
+  background: #333;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: #888;
+  margin-top: 2px;
+}
+
+/* ============ Songs Page ============ */
+.songs-toolbar {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.search-form {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+  min-width: 260px;
+}
+
+.search-input {
+  flex: 1;
+  padding: 10px 16px;
+  background: #2a2a2a;
+  border: 1px solid #444;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 14px;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #4CAF50;
+}
+
+.search-btn {
+  padding: 10px 20px;
+  background: #4CAF50;
+  color: #fff;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.search-btn:hover {
+  background: #43a047;
+}
+
+.filter-group {
+  display: flex;
+  gap: 8px;
+}
+
+.filter-group select {
+  padding: 10px 12px;
+  background: #2a2a2a;
+  border: 1px solid #444;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 13px;
+}
+
+.filter-group select:focus {
+  outline: none;
+  border-color: #4CAF50;
+}
+
+.songs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.song-card {
+  background: #2a2a2a;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  transition: transform 0.2s;
+}
+
+.song-card:hover {
+  transform: translateY(-1px);
+}
+
+.song-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.song-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.song-artist {
+  font-size: 13px;
+  color: #aaa;
+  margin-top: 2px;
+}
+
+.song-album {
+  font-size: 12px;
+  color: #666;
+  margin-top: 2px;
+}
+
+.song-meta {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.tag {
+  background: #333;
+  color: #aaa;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+}
+
+.duration {
+  font-size: 12px;
+  color: #666;
+  margin-left: auto;
+}
+
+.song-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.status {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.status.playable {
+  background: rgba(76, 175, 80, 0.15);
+  color: #4CAF50;
+}
+
+.status.unplayable {
+  background: rgba(244, 67, 54, 0.15);
+  color: #f44336;
+}
+
+.delete-btn {
+  padding: 6px 12px;
+  background: rgba(244, 67, 54, 0.15);
+  color: #f44336;
+  border-radius: 6px;
+  font-size: 12px;
+  transition: all 0.2s;
+}
+
+.delete-btn:hover {
+  background: #f44336;
+  color: #fff;
+}
+
+.delete-btn.small {
+  padding: 4px 10px;
+  font-size: 11px;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 16px 0;
+}
+
+.pagination button {
+  padding: 8px 20px;
+  background: #2a2a2a;
+  color: #fff;
+  border-radius: 8px;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+
+.pagination button:hover:not(:disabled) {
+  background: #4CAF50;
+}
+
+.pagination button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.page-info {
+  font-size: 13px;
+  color: #888;
+}
+
+/* ============ Genres Page ============ */
+.genre-form {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.genre-input {
+  flex: 1;
+  padding: 10px 16px;
+  background: #2a2a2a;
+  border: 1px solid #444;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 14px;
+}
+
+.genre-input:focus {
+  outline: none;
+  border-color: #4CAF50;
+}
+
+.genre-select {
+  padding: 10px 12px;
+  background: #2a2a2a;
+  border: 1px solid #444;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 13px;
+  min-width: 140px;
+}
+
+.add-btn {
+  padding: 10px 24px;
+  background: #4CAF50;
+  color: #fff;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.add-btn:hover {
+  background: #43a047;
+}
+
+.genre-tree {
+  background: #2a2a2a;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.genre-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  border-bottom: 1px solid #333;
+  transition: background 0.15s;
+}
+
+.genre-row:last-child {
+  border-bottom: none;
+}
+
+.genre-row:hover {
+  background: #333;
+}
+
+.genre-icon {
+  font-size: 16px;
+  width: 24px;
+  text-align: center;
+}
+
+.genre-name {
+  flex: 1;
+  font-size: 14px;
+  color: #ddd;
+}
+
+/* ============ Users Page ============ */
+.users-table {
+  background: #2a2a2a;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.users-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.users-table th,
+.users-table td {
+  padding: 14px 20px;
+  text-align: left;
+  border-bottom: 1px solid #333;
+}
+
+.users-table th {
+  background: #333;
+  font-size: 13px;
+  color: #aaa;
+  font-weight: 500;
+}
+
+.users-table td {
+  font-size: 14px;
+  color: #ddd;
+}
+
+.users-table tr:hover {
+  background: #333;
+}
+
+.users-table .status {
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.users-table .status.active {
+  background: rgba(76, 175, 80, 0.15);
+  color: #4CAF50;
+}
+
+.users-table .status.pending {
+  background: rgba(255, 152, 0, 0.15);
+  color: #FF9800;
+}
+
+.action-btn {
+  padding: 6px 12px;
+  background: #333;
+  color: #aaa;
+  border-radius: 6px;
+  font-size: 12px;
+  transition: all 0.2s;
+}
+
+.action-btn:hover {
+  background: #4CAF50;
+  color: #fff;
+}
+
+/* ============ Playlists Page ============ */
+.playlists-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.playlist-card {
+  background: #2a2a2a;
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+
+.playlist-card:hover {
+  transform: translateY(-2px);
+  background: #333;
+}
+
+.playlist-icon {
+  font-size: 48px;
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(244, 67, 54, 0.15);
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.playlist-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.playlist-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.playlist-count {
+  font-size: 13px;
+  color: #aaa;
+  margin-top: 4px;
+}
+
+.playlist-date {
+  font-size: 12px;
+  color: #666;
+  margin-top: 2px;
+}
+
+/* ============ Responsive ============ */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 64px;
+  }
+
+  .logo-text,
+  .logo-sub,
+  .nav-label {
+    display: none;
+  }
+
+  .sidebar-logo {
+    padding: 16px;
+    align-items: center;
+  }
+
+  .nav-item {
+    justify-content: center;
+    padding: 12px;
+  }
+
+  .logout-btn {
+    font-size: 0;
+    padding: 10px;
+  }
+
+  .logout-btn::after {
+    content: '⏻';
+    font-size: 16px;
+  }
+
+  .main-content {
+    margin-left: 64px;
+    padding: 20px;
+  }
+
+  .songs-toolbar {
+    flex-direction: column;
+  }
+
+  .filter-group {
+    flex-wrap: wrap;
+  }
+
+  .songs-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+
+  .genre-form {
+    flex-direction: column;
+  }
+}
+
+/* ============ Songs Table (补齐缺失样式，解决封面过大问题) ============ */
+.songs-table {
+  background: #2a2a2a;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.songs-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.songs-table th,
+.songs-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #333;
+  vertical-align: middle;
+}
+
+.songs-table th {
+  background: #333;
+  font-size: 12px;
+  color: #aaa;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  white-space: nowrap;
+}
+
+.songs-table td {
+  font-size: 13px;
+  color: #ddd;
+}
+
+.songs-table tr:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* 歌曲单元格：封面与文字水平排列 */
+.song-cell {
+  min-width: 220px;
+}
+
+.songs-table .song-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* 关键：限定封面缩略图尺寸为 48x48，避免图片以原始尺寸显示 */
+.song-thumb,
+.song-thumb-placeholder {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: #fff;
+  overflow: hidden;
+}
+
+.song-thumb {
+  background: #1a1a1a;
+}
+
+.song-thumb-placeholder {
+  background: #6366f1;
+}
+
+/* 紧凑的迷你标签 */
+.mini-tag {
+  display: inline-block;
+  background: rgba(76, 175, 80, 0.15);
+  color: #4CAF50;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  margin-right: 4px;
+  margin-bottom: 2px;
+}
+
+/* 来源徽章 */
+.source-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  background: #333;
+  color: #aaa;
+}
+
+/* 操作按钮组 */
+.action-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.view-btn {
+  padding: 6px 12px;
+  background: rgba(76, 175, 80, 0.15);
+  color: #4CAF50;
+  border-radius: 6px;
+  font-size: 12px;
+  transition: all 0.2s;
+}
+
+.view-btn:hover {
+  background: #4CAF50;
+  color: #fff;
+}
+
+/* ============ Crawler Page ============ */
+.crawler-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.stats-section {
+  background: #2a2a2a;
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #333;
+}
+
+/* 策略卡片 */
+.strategy-card {
+  background: #1a1a1a;
+  border-radius: 10px;
+  padding: 20px;
+  border-left: 4px solid #4CAF50;
+}
+
+.strategy-status {
+  margin-bottom: 16px;
+}
+
+.status-warning {
+  display: inline-block;
+  padding: 6px 14px;
+  background: rgba(255, 152, 0, 0.15);
+  color: #FF9800;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.status-success {
+  display: inline-block;
+  padding: 6px 14px;
+  background: rgba(76, 175, 80, 0.15);
+  color: #4CAF50;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.strategy-reasons h4 {
+  font-size: 13px;
+  color: #aaa;
+  margin-bottom: 8px;
+}
+
+.strategy-reasons ul {
+  list-style: disc;
+  padding-left: 20px;
+  color: #ddd;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.strategy-reasons li {
+  margin-bottom: 4px;
+}
+
+.strategy-recommendation {
+  padding: 12px;
+  background: #2a2a2a;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  color: #ddd;
+}
+
+.strategy-recommendation p {
+  margin-bottom: 4px;
+}
+
+.strategy-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* 爬虫表单（手动爬取） */
+.crawl-form-group {
+  margin-bottom: 20px;
+}
+
+.form-label-inline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #aaa;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.count-display {
+  color: #4CAF50;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.radio-group {
+  display: flex;
+  gap: 24px;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #ddd;
+  cursor: pointer;
+}
+
+.radio-label input[type="radio"] {
+  accent-color: #4CAF50;
+  cursor: pointer;
+}
+
+.crawl-input,
+.crawl-select {
+  width: 100%;
+  padding: 10px 14px;
+  background: #1a1a1a;
+  border: 1px solid #444;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+.crawl-input:focus,
+.crawl-select:focus {
+  outline: none;
+  border-color: #4CAF50;
+}
+
+.crawl-select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3e%3cpolyline points='6 9 12 15 18 9'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 36px;
+}
+
+/* 数量滑块 */
+.crawl-slider {
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  background: #333;
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+}
+
+.crawl-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: #4CAF50;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.crawl-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+
+.crawl-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: #4CAF50;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}
+
+.slider-marks {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  font-size: 11px;
+  color: #666;
+}
+
+/* 启动按钮区 */
+.crawl-form-actions {
+  margin-top: 24px;
+}
+
+.action-btn.primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  background: #4CAF50;
+  color: #fff;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.action-btn.primary:hover:not(:disabled) {
+  background: #43a047;
+  transform: translateY(-1px);
+}
+
+.action-btn.primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* 加载旋转图标 */
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* 爬取错误详情 */
+.crawl-error-detail {
+  margin-top: 20px;
+  padding: 16px;
+  background: rgba(244, 67, 54, 0.08);
+  border: 1px solid rgba(244, 67, 54, 0.3);
+  border-radius: 10px;
+}
+
+.error-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.crawl-error-detail .error-icon {
+  color: #f44336;
+  font-size: 18px;
+}
+
+.error-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #f44336;
+}
+
+.crawl-error-detail .error-message {
+  background: rgba(244, 67, 54, 0.1);
+  color: #ffcccc;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: 'Consolas', 'Monaco', monospace;
+  word-break: break-all;
+  margin-bottom: 12px;
+}
+
+.error-suggestions {
+  font-size: 13px;
+  color: #aaa;
+}
+
+.error-suggestions p {
+  margin-bottom: 6px;
+  color: #ddd;
+}
+
+.error-suggestions ul {
+  list-style: disc;
+  padding-left: 20px;
+}
+
+.error-suggestions li {
+  margin-bottom: 4px;
+}
+
+.crawl-error-detail .retry-btn {
+  margin-top: 12px;
+  padding: 6px 14px;
+  background: #333;
+  color: #ddd;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.crawl-error-detail .retry-btn:hover {
+  background: #444;
+}
+
+/* ============ 爬取结果展示 ============ */
+.result-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.result-stat-card {
+  background: #1a1a1a;
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid #333;
+}
+
+.result-stat-card.success {
+  border-color: rgba(76, 175, 80, 0.3);
+}
+
+.result-stat-card.error {
+  border-color: rgba(244, 67, 54, 0.3);
+}
+
+.result-stat-card.new {
+  border-color: rgba(33, 150, 243, 0.3);
+}
+
+.result-stat-card.updated {
+  border-color: rgba(255, 152, 0, 0.3);
+}
+
+.result-stat-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.result-stat-card.success .result-stat-icon {
+  background: rgba(76, 175, 80, 0.15);
+  color: #4CAF50;
+}
+
+.result-stat-card.error .result-stat-icon {
+  background: rgba(244, 67, 54, 0.15);
+  color: #f44336;
+}
+
+.result-stat-card.new .result-stat-icon {
+  background: rgba(33, 150, 243, 0.15);
+  color: #2196F3;
+}
+
+.result-stat-card.updated .result-stat-icon {
+  background: rgba(255, 152, 0, 0.15);
+  color: #FF9800;
+}
+
+.result-stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.result-stat-label {
+  font-size: 12px;
+  color: #888;
+}
+
+/* 爬取到的歌曲列表 */
+.crawl-result-songs {
+  margin-top: 16px;
+}
+
+.result-songs-title {
+  font-size: 14px;
+  color: #ddd;
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+.result-songs-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 8px;
+  max-height: 480px;
+  overflow-y: auto;
+  padding: 4px;
+}
+
+.result-song-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: #1a1a1a;
+  border-radius: 8px;
+  border: 1px solid #333;
+  transition: all 0.15s;
+}
+
+.result-song-item:hover {
+  background: #222;
+  border-color: #444;
+}
+
+.result-song-item.is-new {
+  border-left: 3px solid #2196F3;
+}
+
+.result-song-item.is-updated {
+  border-left: 3px solid #FF9800;
+}
+
+.song-status-icon {
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+/* 小封面（结果列表用） */
+.song-thumb-small {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #fff;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.song-thumb-small img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.song-info-mini {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.song-title-mini {
+  font-size: 13px;
+  color: #ddd;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.song-artist-mini {
+  font-size: 11px;
+  color: #888;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.song-tag {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.tag-new {
+  background: rgba(33, 150, 243, 0.15);
+  color: #2196F3;
+}
+
+.tag-updated {
+  background: rgba(255, 152, 0, 0.15);
+  color: #FF9800;
+}
+
+.result-songs-more {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 12px;
+  color: #888;
+  font-size: 13px;
+  font-style: italic;
+}
+
+/* ============ 其他爬虫页样式 ============ */
+.error-state {
+  text-align: center;
+  padding: 60px 20px;
+  background: #2a2a2a;
+  border-radius: 12px;
+}
+
+.error-state .error-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.error-state .error-message {
+  color: #f44336;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.error-state .retry-btn {
+  padding: 10px 24px;
+  background: #4CAF50;
+  color: #fff;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.error-state .retry-btn:hover {
+  background: #43a047;
+}
+
+.maintenance-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* 平台分布 */
+.platform-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.platform-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: #1a1a1a;
+  border-radius: 8px;
+  border: 1px solid #333;
+}
+
+.platform-name {
+  font-size: 14px;
+  color: #ddd;
+  text-transform: capitalize;
+}
+
+.platform-count {
+  font-size: 13px;
+  color: #4CAF50;
+  font-weight: 600;
+}
+
+/* 爬取记录表格 */
+.crawl-logs {
+  background: #1a1a1a;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.crawl-logs table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.crawl-logs th,
+.crawl-logs td {
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid #2a2a2a;
+  font-size: 13px;
+  color: #ddd;
+  white-space: nowrap;
+}
+
+.crawl-logs th {
+  background: #222;
+  font-weight: 600;
+  color: #aaa;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.crawl-logs tr:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.crawl-logs .status {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+}
+
+.crawl-logs .status.success {
+  background: rgba(76, 175, 80, 0.15);
+  color: #4CAF50;
+}
+
+.crawl-logs .status.failed {
+  background: rgba(244, 67, 54, 0.15);
+  color: #f44336;
+}
+
+.crawl-logs .status.running {
+  background: rgba(255, 152, 0, 0.15);
+  color: #FF9800;
+}
+
+.crawl-logs .status.partial {
+  background: rgba(33, 150, 243, 0.15);
+  color: #2196F3;
+}
+
+/* 兼容旧 crawl-actions（保留以防其他组件使用） */
+.crawl-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* ============ Scrollbar ============ */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

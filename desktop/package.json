@@ -1,0 +1,84 @@
+{
+  "name": "music-box-desktop",
+  "productName": "MusicBox",
+  "version": "1.4.7",
+  "description": "音乐盒子桌面版",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "stage": "node scripts/stage.js",
+    "start": "electron .",
+    "dist": "electron-builder --win"
+  },
+  "devDependencies": {
+    "electron": "^33.4.11",
+    "electron-builder": "^25.1.8",
+    "embedded-postgres": "15.19.0-beta.19",
+    "pg": "^8.13.1"
+  },
+  "build": {
+    "appId": "cn.musicbox.desktop",
+    "productName": "MusicBox",
+    "asar": true,
+    "directories": {
+      "output": "release"
+    },
+    "publish": [
+      {
+        "provider": "generic",
+        "url": "https://updates.musicbox.local/desktop/",
+        "channel": "latest"
+      }
+    ],
+    "files": [
+      "main.js",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "app/server",
+        "to": "server"
+      },
+      {
+        "from": "app/web",
+        "to": "web"
+      },
+      {
+        "from": "resources/db",
+        "to": "db"
+      },
+      {
+        "from": "node_modules/@embedded-postgres/windows-x64/native",
+        "to": "pgbin"
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "artifactName": "MusicBox-Setup-${version}.${ext}",
+      "shortcutName": "音乐盒子"
+    },
+    "portable": {
+      "artifactName": "MusicBox-Portable-${version}.${ext}"
+    }
+  },
+  "dependencies": {
+    "electron-updater": "^6.8.11"
+  }
+}

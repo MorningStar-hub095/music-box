@@ -1,0 +1,160 @@
+/* web/src/components/PlaylistShelf.css — 3D 立体歌单架 */
+
+.shelf-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2500;
+  background: rgba(6, 6, 14, 0.92);
+  backdrop-filter: blur(14px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: shelf-fade-in 0.3s ease;
+  overflow: hidden;
+}
+@keyframes shelf-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.shelf-close {
+  position: absolute;
+  top: 22px; right: 26px;
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.06);
+  color: #fff;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s;
+  z-index: 10;
+}
+.shelf-close:hover { background: rgba(239,68,68,0.6); }
+
+.shelf-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 4px;
+  text-shadow: 0 0 20px rgba(255,255,255,0.3);
+}
+.shelf-subtitle {
+  margin-top: 8px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 1px;
+}
+
+/* ── 3D 舞台 ── */
+.shelf-stage {
+  position: relative;
+  width: 100%;
+  height: 55vh;
+  margin-top: 30px;
+  perspective: 1500px;
+  perspective-origin: 50% 42%;
+  cursor: grab;
+  touch-action: pan-y;
+}
+.shelf-stage.dragging { cursor: grabbing; }
+
+.shelf-inner {
+  position: absolute;
+  top: 42%;
+  left: 50%;
+  transform-style: preserve-3d;
+}
+
+.shelf-card {
+  position: absolute;
+  top: 0; left: 0;
+  width: 200px;
+  margin: -140px 0 0 -100px; /* 200x280 卡片，锚定中心 */
+  transform-style: preserve-3d;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+.shelf-stage.dragging .shelf-card { transition: none; }
+
+.shelf-card-cover {
+  width: 200px;
+  height: 200px;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 18px 45px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.shelf-card.center .shelf-card-cover {
+  box-shadow: 0 24px 60px rgba(0,0,0,0.7), 0 0 34px rgba(255,255,255,0.12), 0 0 0 1px rgba(255,255,255,0.18);
+}
+.shelf-card-cover img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+.shelf-card-note {
+  font-size: 54px;
+  color: rgba(255,255,255,0.4);
+}
+
+.shelf-card-name {
+  margin-top: 14px;
+  text-align: center;
+  font-size: 14px;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* 抵消 3D 旋转，让文字始终朝向观众 */
+  transform: rotateY(calc(var(--card-angle, 0deg)));
+}
+.shelf-card-count {
+  text-align: center;
+  font-size: 11px;
+  color: rgba(255,255,255,0.5);
+  margin-top: 4px;
+}
+.shelf-card.current .shelf-card-count { color: #17C3B2; }
+
+.shelf-card-badge {
+  position: absolute;
+  top: 10px; left: 10px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(23, 195, 178, 0.85);
+  color: #04211e;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+/* 中心卡悬浮升起 */
+.shelf-card.center .shelf-card-cover {
+  transform: translateY(-14px);
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ── 地面反光 ── */
+.shelf-floor {
+  position: absolute;
+  left: 50%;
+  top: calc(42% + 120px);
+  width: 70vw;
+  height: 130px;
+  transform: translateX(-50%) rotateX(72deg);
+  background: radial-gradient(ellipse at center, rgba(255,255,255,0.07) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.shelf-hint {
+  margin-top: 26px;
+  font-size: 13px;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 2px;
+  min-height: 20px;
+}

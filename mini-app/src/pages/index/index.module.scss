@@ -1,0 +1,442 @@
+@use '@/styles/variables.scss' as *;
+
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('~@/assets/background.jpg') center/cover no-repeat fixed;
+  padding: 0 $spacing-lg;
+  box-sizing: border-box;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.empty {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.emptyText {
+  color: $color-text-secondary;
+  font-size: $font-size-md;
+}
+
+// ========== 封面区 ==========
+.coverArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 48rpx;
+  padding-bottom: 24rpx;
+}
+
+.cover {
+  width: 360rpx;
+  height: 360rpx;
+  border-radius: $radius-xl;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all $transition-base;
+}
+
+.coverIcon {
+  font-size: 120rpx;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.coverImg {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+}
+
+.trackMeta {
+  margin-top: 32rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.trackTitle {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $color-text-primary;
+  margin-bottom: 8rpx;
+}
+
+.trackArtist {
+  font-size: $font-size-sm;
+  color: $color-text-secondary;
+}
+
+.actionRow {
+  margin-top: 24rpx;
+  display: flex;
+  flex-direction: row;
+  gap: 48rpx;
+}
+
+.iconBtn {
+  width: 72rpx;
+  height: 72rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: $radius-round;
+  background: $color-bg-card;
+}
+
+.iconText {
+  font-size: 36rpx;
+}
+
+// ========== 歌词区 ==========
+.lyricScroll {
+  flex: 1;
+  margin-top: 16rpx;
+  margin-bottom: 16rpx;
+  height: 360rpx;
+  border-radius: $radius-md;
+  background: $color-bg-card;
+  position: relative;
+  perspective: 900rpx;
+  overflow: hidden;
+}
+
+.lyricInner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 144rpx $spacing-lg;
+  min-height: calc(100% + 288rpx);
+  transform-style: preserve-3d;
+}
+
+.lyricLine {
+  width: 100%;
+  font-size: $font-size-md;
+  color: $color-text-tertiary;
+  line-height: $line-height-loose;
+  padding: 16rpx 0;
+  text-align: center;
+  transition: transform 0.45s ease, opacity 0.45s ease, color 0.45s ease, font-size 0.45s ease;
+  transform-origin: center center;
+}
+
+.lyricActive {
+  font-size: 36rpx;
+  color: $color-highlight;
+  font-weight: $font-weight-bold;
+  text-shadow: 0 0 18rpx rgba(23, 195, 178, 0.45);
+}
+
+.lyricCenter {
+  opacity: 1;
+  transform: translateX(0) translateZ(90rpx) rotateX(0deg) rotateY(0deg) scale(1.08);
+}
+
+.lyricUpper.lyricLevel1 {
+  opacity: 0.82;
+  transform: translateX(-28rpx) translateZ(44rpx) rotateX(24deg) rotateY(-10deg) scale(0.94);
+}
+
+.lyricLower.lyricLevel1 {
+  opacity: 0.82;
+  transform: translateX(28rpx) translateZ(44rpx) rotateX(-24deg) rotateY(10deg) scale(0.94);
+}
+
+.lyricUpper.lyricLevel2 {
+  opacity: 0.58;
+  transform: translateX(-54rpx) translateZ(-18rpx) rotateX(42deg) rotateY(-18deg) scale(0.82);
+}
+
+.lyricLower.lyricLevel2 {
+  opacity: 0.58;
+  transform: translateX(54rpx) translateZ(-18rpx) rotateX(-42deg) rotateY(18deg) scale(0.82);
+}
+
+.lyricUpper.lyricLevel3 {
+  opacity: 0.34;
+  transform: translateX(-76rpx) translateZ(-70rpx) rotateX(58deg) rotateY(-24deg) scale(0.72);
+}
+
+.lyricLower.lyricLevel3 {
+  opacity: 0.34;
+  transform: translateX(76rpx) translateZ(-70rpx) rotateX(-58deg) rotateY(24deg) scale(0.72);
+}
+
+.lyricEmpty {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $color-text-tertiary;
+  font-size: $font-size-md;
+}
+
+// ========== 播放列表抽屉 ==========
+.playlistPanel {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  max-height: 70vh;
+  background: $color-bg-card;
+  border-radius: $radius-xl $radius-xl 0 0;
+  padding: 24rpx $spacing-lg;
+  padding-bottom: calc(24rpx + env(safe-area-inset-bottom));
+  z-index: 100;
+  box-shadow: $shadow-popup;
+  display: flex;
+  flex-direction: column;
+}
+
+.playlistHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16rpx;
+  padding-bottom: 16rpx;
+  border-bottom: 1rpx solid $color-divider;
+}
+
+.playlistTitle {
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: $color-text-primary;
+}
+
+.playlistClose {
+  font-size: 48rpx;
+  color: $color-text-secondary;
+  padding: 0 16rpx;
+  line-height: 1;
+}
+
+.playlistScroll {
+  flex: 1;
+  max-height: 56vh;
+}
+
+.playlistItem,
+.playlistItemActive {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 20rpx 16rpx;
+  border-radius: $radius-sm;
+  margin-bottom: 8rpx;
+}
+
+.playlistItem {
+  background: transparent;
+}
+
+.playlistItemActive {
+  background: rgba(23, 195, 178, 0.12);
+}
+
+.playlistIndex {
+  width: 56rpx;
+  font-size: $font-size-sm;
+  color: $color-text-tertiary;
+  text-align: center;
+}
+
+.playlistItemActive .playlistIndex {
+  color: $color-primary;
+  font-weight: $font-weight-bold;
+}
+
+.playlistInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-left: 16rpx;
+}
+
+.playlistName {
+  font-size: $font-size-md;
+  color: $color-text-primary;
+  margin-bottom: 4rpx;
+}
+
+.playlistItemActive .playlistName {
+  color: $color-primary;
+}
+
+.playlistArtist {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+}
+
+.playlistFav {
+  font-size: 32rpx;
+}
+
+// ========== 底部控制区 ==========
+.controlArea {
+  padding-top: 16rpx;
+  padding-bottom: calc(16rpx + env(safe-area-inset-bottom));
+}
+
+.progressRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 24rpx;
+}
+
+.timeText {
+  font-size: $font-size-xs;
+  color: $color-text-secondary;
+  width: 80rpx;
+  text-align: center;
+}
+
+.sliderWrap {
+  flex: 1;
+  margin: 0 8rpx;
+  position: relative;
+}
+
+// 快进/快退进度条标记
+.seekMarker {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 16rpx;
+  border-radius: $radius-round;
+  pointer-events: none;
+  animation: seekMarkerFlash 0.8s ease-out forwards;
+  z-index: 1;
+}
+.seekMarkerRewind {
+  background: linear-gradient(90deg, rgba(251, 146, 60, 0.9), rgba(251, 146, 60, 0.2));
+  box-shadow: 0 0 20rpx rgba(251, 146, 60, 0.6);
+}
+.seekMarkerForward {
+  background: linear-gradient(90deg, rgba(99, 102, 241, 0.2), rgba(99, 102, 241, 0.9));
+  box-shadow: 0 0 20rpx rgba(99, 102, 241, 0.6);
+}
+@keyframes seekMarkerFlash {
+  0% { opacity: 1; transform: translateY(-50%) scaleY(1); }
+  100% { opacity: 0; transform: translateY(-50%) scaleY(0.4); }
+}
+
+.controlRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 $spacing-sm;
+}
+
+.modeBtn {
+  width: 140rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.modeIcon {
+  font-size: 40rpx;
+  color: $color-primary;
+  margin-bottom: 4rpx;
+}
+
+.modeLabel {
+  font-size: 20rpx;
+  color: $color-text-secondary;
+}
+
+.mainControls {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.ctrlBtn {
+  width: 88rpx;
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: $radius-round;
+  background: $color-bg-card;
+}
+
+// 快退/快进按钮 — 略小于切歌按钮
+.seekBtn {
+  width: 72rpx;
+  height: 72rpx;
+}
+
+.seekBtn .ctrlIcon {
+  font-size: 32rpx;
+}
+
+.ctrlIcon {
+  font-size: 40rpx;
+  color: $color-text-primary;
+}
+
+.playBtn {
+  width: 112rpx;
+  height: 112rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: $radius-round;
+  background: linear-gradient(135deg, $color-primary 0%, $color-primary-light 100%);
+  box-shadow: 0 8rpx 24rpx rgba(23, 195, 178, 0.4);
+}
+
+.playIcon {
+  font-size: 48rpx;
+  color: #ffffff;
+}
+
+// ========== 加载态 & 错误态 ==========
+.errorBar {
+  padding: 8px 16px;
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  font-size: 14px;
+  text-align: center;
+}
+
+.loadingText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
+}
+
+// ========== 主题切换 ==========
+.themeBtn { font-size: 20px; padding: 4px 8px; }
+.themeMenu { position: absolute; top: 56px; right: 16px; background: #1A1F2E; border-radius: 12px; padding: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.3); z-index: 50; display: flex; flex-direction: column; gap: 8px; }
+.themeToggle { padding: 8px 16px; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; font-size: 14px; text-align: center; }
+.themePresets { display: flex; gap: 4px; }
+.themePresetBtn { flex: 1; padding: 4px 8px; font-size: 12px; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; color: #fff; text-align: center; }
+.active { background: #17C3B2; border-color: #17C3B2; }
+
+// ========== 频谱波形 ==========
+.waveBarContainer { display: flex; align-items: flex-end; justify-content: center; gap: 4px; height: 60px; margin: 8px 0; }
+.waveBar { width: 6px; background: #17C3B2; border-radius: 3px; animation: wave 0.8s ease-in-out infinite alternate; }
+.waveBar1 { animation-delay: 0s; height: 30px; }
+.waveBar2 { animation-delay: 0.2s; height: 45px; }
+.waveBar3 { animation-delay: 0.4s; height: 20px; }
+@keyframes wave { 0% { transform: scaleY(0.3); } 100% { transform: scaleY(1); } }
+
+// ========== 本地导入 ==========
+.importBtn { padding: 8px 16px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: #fff; font-size: 14px; }

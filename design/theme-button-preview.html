@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>主题切换按钮风格 - Midnight Galaxy</title>
+<style>
+  :root {
+    --color-primary: #6366F1;
+    --color-primary-light: #818CF8;
+    --color-primary-glow: rgba(99, 102, 241, 0.4);
+    --color-bg-page: #080B1A;
+    --color-bg-card: #0F1228;
+    --color-text-primary: #F8FAFC;
+    --color-text-secondary: #94A3B8;
+    --color-text-tertiary: #475569;
+    --glass-bg: rgba(26, 29, 58, 0.4);
+    --glass-bg-hover: rgba(26, 29, 58, 0.6);
+    --glass-border: rgba(255, 255, 255, 0.06);
+    --glass-border-hover: rgba(255, 255, 255, 0.12);
+    --glass-blur: 24px;
+    --glass-blur-heavy: 40px;
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--color-bg-page);
+    color: var(--color-text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    min-height: 100vh;
+    padding: 40px 20px;
+    background-image: radial-gradient(ellipse at top, rgba(99, 102, 241, 0.08) 0%, transparent 60%);
+  }
+  .container { max-width: 900px; margin: 0 auto; }
+  h1 {
+    font-size: 22px;
+    color: var(--color-primary-light);
+    text-align: center;
+    margin-bottom: 6px;
+    text-shadow: 0 0 16px var(--color-primary-glow);
+  }
+  .subtitle { text-align: center; color: var(--color-text-secondary); font-size: 13px; margin-bottom: 36px; }
+
+  .style-section { margin-bottom: 32px; }
+  .style-header { display: flex; align-items: baseline; gap: 12px; margin-bottom: 10px; padding-left: 4px; }
+  .style-name { font-size: 16px; font-weight: 600; color: var(--color-text-primary); }
+  .style-tag { font-size: 10px; padding: 2px 8px; border-radius: 4px; background: rgba(99, 102, 241, 0.15); color: var(--color-primary-light); border: 1px solid rgba(99, 102, 241, 0.3); }
+  .style-desc { color: var(--color-text-secondary); font-size: 12px; margin-bottom: 14px; padding-left: 4px; line-height: 1.5; }
+
+  /* 模拟场景容器 */
+  .scene {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 16px 24px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    min-height: 56px;
+    position: relative;
+  }
+  .brand-mock { font-size: 14px; font-weight: 700; color: var(--color-primary-light); }
+
+  /* ============ 风格 A: 圆形按钮 + 下拉菜单 ============ */
+  .theme-a-btn {
+    margin-left: auto;
+    width: 34px; height: 34px;
+    border-radius: 999px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+  .theme-a-btn:hover {
+    background: var(--glass-bg-hover);
+    border-color: var(--glass-border-hover);
+    box-shadow: 0 0 12px var(--color-primary-glow);
+    transform: rotate(15deg);
+  }
+  .theme-a-btn svg { width: 16px; height: 16px; fill: currentColor; }
+
+  .theme-a-menu {
+    position: absolute;
+    top: 50px; right: 24px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur-heavy));
+    -webkit-backdrop-filter: blur(var(--glass-blur-heavy));
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 8px;
+    box-shadow: var(--glass-shadow);
+    min-width: 180px;
+    z-index: 20;
+  }
+  .theme-a-menu .menu-item {
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .theme-a-menu .menu-item:hover {
+    background: var(--glass-bg-hover);
+    color: var(--color-text-primary);
+  }
+  .theme-a-menu .divider {
+    height: 1px;
+    background: var(--glass-border);
+    margin: 4px 0;
+  }
+  .theme-a-menu .preset-row {
+    display: flex;
+    gap: 4px;
+    padding: 4px 8px;
+  }
+  .theme-a-menu .preset {
+    flex: 1;
+    padding: 6px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    background: rgba(0,0,0,0.2);
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .theme-a-menu .preset:hover { color: var(--color-text-primary); background: var(--glass-bg-hover); }
+  .theme-a-menu .preset.active {
+    color: var(--color-primary-light);
+    background: rgba(99, 102, 241, 0.15);
+    border-color: rgba(99, 102, 241, 0.4);
+  }
+
+  /* ============ 风格 B: 双按钮直接切换 ============ */
+  .theme-b-group {
+    margin-left: auto;
+    display: flex;
+    gap: 4px;
+    background: rgba(0,0,0,0.25);
+    border: 1px solid var(--glass-border);
+    border-radius: 999px;
+    padding: 3px;
+  }
+  .theme-b-btn {
+    width: 28px; height: 28px;
+    border-radius: 999px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--color-text-tertiary);
+    cursor: pointer;
+    transition: all 0.25s;
+    border: none;
+    background: transparent;
+  }
+  .theme-b-btn:hover { color: var(--color-text-secondary); }
+  .theme-b-btn.active {
+    background: linear-gradient(135deg, var(--color-primary), #4F46E5);
+    color: #fff;
+    box-shadow: 0 2px 8px var(--color-primary-glow);
+  }
+  .theme-b-btn svg { width: 14px; height: 14px; fill: currentColor; }
+
+  .theme-b-presets {
+    margin-left: 6px;
+    display: flex;
+    gap: 4px;
+  }
+  .theme-b-preset {
+    width: 24px; height: 24px;
+    border-radius: 999px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.25s;
+    position: relative;
+  }
+  .theme-b-preset:hover { transform: scale(1.15); }
+  .theme-b-preset.active {
+    border-color: var(--color-text-primary);
+    box-shadow: 0 0 8px rgba(255,255,255,0.4);
+  }
+  .theme-b-preset.galaxy { background: linear-gradient(135deg, #6366F1, #0F1228); }
+  .theme-b-preset.nebula { background: linear-gradient(135deg, #EC4899, #2D1B2D); }
+  .theme-b-preset.aurora { background: linear-gradient(135deg, #10B981, #0F2820); }
+  .theme-b-preset .label {
+    position: absolute;
+    bottom: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 9px;
+    color: var(--color-text-tertiary);
+    white-space: nowrap;
+  }
+
+  /* ============ 风格 C: 齿轮设置图标 + 弹层 ============ */
+  .theme-c-btn {
+    margin-left: auto;
+    width: 34px; height: 34px;
+    border-radius: 8px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+  .theme-c-btn:hover {
+    background: var(--glass-bg-hover);
+    color: var(--color-primary-light);
+    box-shadow: 0 0 12px var(--color-primary-glow);
+  }
+  .theme-c-btn svg { width: 16px; height: 16px; fill: currentColor; transition: transform 0.4s; }
+  .theme-c-btn:hover svg { transform: rotate(60deg); }
+
+  .hint { margin-top: 24px; padding: 16px 20px; background: rgba(99, 102, 241, 0.08); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 10px; font-size: 12px; color: var(--color-text-secondary); line-height: 1.7; }
+  .hint strong { color: var(--color-primary-light); }
+
+  .scenes-row { display: flex; gap: 12px; margin-bottom: 12px; align-items: flex-start; }
+  .scene-label { font-size: 11px; color: var(--color-text-tertiary); margin-top: 4px; text-align: center; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>♪ 主题切换按钮风格对比</h1>
+  <p class="subtitle">深色/亮色 + 三主题预设（galaxy/nebula/aurora）· 三种交互方式</p>
+
+  <!-- 风格 A -->
+  <div class="style-section">
+    <div class="style-header">
+      <div class="style-name">风格 A · 圆形按钮 + 下拉菜单</div>
+      <span class="style-tag">推荐 · 当前结构升级</span>
+    </div>
+    <div class="style-desc">
+      月亮/太阳圆形按钮（hover 旋转 15°），点击展开下拉菜单，含「切换模式」+「三预设」。<strong>沿用现有交互，视觉升级</strong>。
+    </div>
+    <div class="scene">
+      <div class="brand-mock">音乐盒子</div>
+      <button class="theme-a-btn">
+        <svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg>
+      </button>
+      <div class="theme-a-menu">
+        <div class="menu-item">
+          <span>☀️</span> 切换为亮色
+        </div>
+        <div class="divider"></div>
+        <div class="preset-row">
+          <div class="preset active">星河</div>
+          <div class="preset">星云</div>
+          <div class="preset">极光</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 风格 B -->
+  <div class="style-section">
+    <div class="style-header">
+      <div class="style-name">风格 B · 双按钮 + 色块预设</div>
+      <span class="style-tag">一步到位 · 可视化</span>
+    </div>
+    <div class="style-desc">
+      月亮/太阳双按钮胶囊切换 + 三主题色块圆点直接点击。<strong>无需展开菜单，所有选项一目了然</strong>。
+    </div>
+    <div class="scene" style="padding-top: 28px; padding-bottom: 28px;">
+      <div class="brand-mock">音乐盒子</div>
+      <div style="margin-left: auto; display: flex; align-items: center; gap: 10px;">
+        <div class="theme-b-group">
+          <button class="theme-b-btn active" title="深色">
+            <svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg>
+          </button>
+          <button class="theme-b-btn" title="亮色">
+            <svg viewBox="0 0 24 24"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58a.996.996 0 0 0-1.41 0 .996.996 0 0 0 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37a.996.996 0 0 0-1.41 0 .996.996 0 0 0 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0a.996.996 0 0 0 0-1.41l-1.06-1.06zm1.06-10.96a.996.996 0 0 0 0-1.41.996.996 0 0 0-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36a.996.996 0 0 0 0-1.41.996.996 0 0 0-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"/></svg>
+          </button>
+        </div>
+        <div class="theme-b-presets">
+          <div class="theme-b-preset galaxy active" title="星河"></div>
+          <div class="theme-b-preset nebula" title="星云"></div>
+          <div class="theme-b-preset aurora" title="极光"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 风格 C -->
+  <div class="style-section">
+    <div class="style-header">
+      <div class="style-name">风格 C · 齿轮图标 + 弹层</div>
+      <span class="style-tag">设置化 · 适合多选项</span>
+    </div>
+    <div class="style-desc">
+      方形圆角齿轮图标（hover 旋转 60°），点击展开设置弹层。<strong>暗示"设置"，但与"主题"含义略偏</strong>。
+    </div>
+    <div class="scene">
+      <div class="brand-mock">音乐盒子</div>
+      <button class="theme-c-btn">
+        <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94 0 .31.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="hint">
+    <strong>建议：</strong>风格 A（圆形按钮 + 下拉菜单），原因：<br>
+    • 沿用现有交互结构（点击展开菜单），用户无需重新学习<br>
+    • 月亮 SVG 图标 + hover 旋转 15°，比 emoji 🌙 跨平台一致<br>
+    • 下拉菜单分两部分：「模式切换」+「预设色块」，结构清晰<br>
+    • 比 B 更省空间（不需要常驻显示所有色块）<br>
+    • 比 C 更准确传达"主题切换"含义（齿轮更适合"设置"）
+  </div>
+</div>
+</body>
+</html>

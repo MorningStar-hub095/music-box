@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>搜索栏 + Action Row + 三级按钮 - Midnight Galaxy</title>
+<style>
+  :root {
+    --color-primary: #6366F1;
+    --color-primary-light: #818CF8;
+    --color-primary-dark: #4F46E5;
+    --color-primary-glow: rgba(99, 102, 241, 0.4);
+    --color-primary-soft: rgba(99, 102, 241, 0.12);
+    --color-bg-page: #080B1A;
+    --color-bg-card: #0F1228;
+    --color-bg-hover: #1A1D3A;
+    --color-text-primary: #F8FAFC;
+    --color-text-secondary: #94A3B8;
+    --color-text-tertiary: #475569;
+    --color-favorite: #F472B6;
+    --color-highlight: #FBBF24;
+    --glass-bg: rgba(26, 29, 58, 0.4);
+    --glass-bg-hover: rgba(26, 29, 58, 0.6);
+    --glass-border: rgba(255, 255, 255, 0.06);
+    --glass-border-hover: rgba(255, 255, 255, 0.12);
+    --glass-blur: 24px;
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--color-bg-page);
+    color: var(--color-text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    min-height: 100vh;
+    padding: 40px 20px;
+    background-image:
+      radial-gradient(ellipse at top, rgba(99, 102, 241, 0.08) 0%, transparent 60%);
+  }
+  .container { max-width: 900px; margin: 0 auto; }
+  h1 { font-size: 22px; color: var(--color-primary-light); text-align: center; margin-bottom: 6px; text-shadow: 0 0 16px var(--color-primary-glow); }
+  .subtitle { text-align: center; color: var(--color-text-secondary); font-size: 13px; margin-bottom: 36px; }
+
+  .section { margin-bottom: 32px; }
+  .section-title { font-size: 14px; color: var(--color-text-primary); margin-bottom: 12px; padding-left: 4px; display: flex; align-items: center; gap: 8px; }
+  .section-title::before { content: ''; width: 3px; height: 14px; background: var(--color-primary-light); border-radius: 2px; }
+
+  /* 模拟容器 */
+  .mock {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 16px;
+  }
+
+  /* ============ 搜索栏 ============ */
+  .search-bar { display: flex; gap: 8px; align-items: center; }
+  .search-input-wrap {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .search-input-wrap svg.search-icon {
+    position: absolute;
+    left: 14px;
+    width: 14px; height: 14px;
+    stroke: var(--color-text-tertiary);
+    stroke-width: 2;
+    fill: none;
+    stroke-linecap: round;
+    transition: stroke 0.25s;
+    pointer-events: none;
+  }
+  .search-input-wrap:focus-within svg.search-icon {
+    stroke: var(--color-primary-light);
+  }
+  .search-input {
+    width: 100%;
+    height: 38px;
+    padding: 0 14px 0 38px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid var(--glass-border);
+    color: var(--color-text-primary);
+    font-size: 13px;
+    outline: none;
+    transition: all 0.25s;
+  }
+  .search-input::placeholder { color: var(--color-text-tertiary); }
+  .search-input:focus {
+    border-color: var(--color-primary);
+    background: var(--glass-bg-hover);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  }
+
+  .search-btn, .import-btn {
+    height: 38px;
+    padding: 0 14px;
+    border-radius: 999px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--color-text-secondary);
+    font-size: 12px;
+    display: flex; align-items: center; gap: 6px;
+    cursor: pointer;
+    transition: all 0.25s;
+    white-space: nowrap;
+  }
+  .search-btn { padding: 0; width: 38px; justify-content: center; }
+  .search-btn:hover, .import-btn:hover {
+    background: var(--glass-bg-hover);
+    color: var(--color-primary-light);
+    border-color: var(--glass-border-hover);
+    box-shadow: 0 0 12px var(--color-primary-glow);
+    transform: translateY(-1px);
+  }
+  .search-btn svg, .import-btn svg { width: 14px; height: 14px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* ============ Action Row 4 个按钮（三级层次） ============ */
+  .action-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  /* 三级层次：
+     L1 主操作（激活态主色填充）: 收藏激活 / 当前歌词激活 / 列表激活 / 频谱激活
+     L2 玻璃透明（默认态）: 收藏 / 歌词 / 列表 / 频谱
+     L3 心形收藏激活（特殊色） */
+  .icon-btn {
+    width: 40px; height: 40px;
+    border-radius: 999px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--color-text-secondary);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+  }
+  .icon-btn:hover {
+    background: var(--glass-bg-hover);
+    color: var(--color-text-primary);
+    border-color: var(--glass-border-hover);
+    box-shadow: 0 0 16px var(--color-primary-glow);
+    transform: translateY(-2px);
+  }
+  .icon-btn:active { transform: translateY(0) scale(0.95); }
+
+  /* L1 主操作激活态：主色填充 */
+  .icon-btn.active {
+    color: #fff;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+    border-color: transparent;
+    box-shadow: 0 4px 16px var(--color-primary-glow);
+  }
+  .icon-btn.active:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 6px 24px var(--color-primary-glow);
+  }
+
+  /* L3 收藏激活态：粉色填充（克制版，不浮夸） */
+  .icon-btn.fav-active {
+    color: var(--color-favorite);
+    background: rgba(244, 114, 182, 0.12);
+    border-color: rgba(244, 114, 182, 0.3);
+    box-shadow: 0 0 12px rgba(244, 114, 182, 0.25);
+  }
+  .icon-btn.fav-active:hover {
+    background: rgba(244, 114, 182, 0.2);
+    box-shadow: 0 0 20px rgba(244, 114, 182, 0.4);
+  }
+
+  .icon-btn svg {
+    width: 18px; height: 18px;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: all 0.25s;
+  }
+  .icon-btn:hover svg {
+    stroke-width: 2.2;
+    filter: drop-shadow(0 0 4px currentColor);
+  }
+  .icon-btn.active svg, .icon-btn.fav-active svg {
+    fill: currentColor;
+    stroke-width: 0;
+  }
+
+  /* 标签 */
+  .label-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 8px;
+  }
+  .label-row .label {
+    width: 40px;
+    text-align: center;
+    font-size: 10px;
+    color: var(--color-text-tertiary);
+  }
+
+  /* 状态说明 */
+  .state-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 24px;
+  }
+  .state-card {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    padding: 12px;
+    text-align: center;
+  }
+  .state-card .icon-btn { margin: 0 auto 8px; }
+  .state-card .name { font-size: 11px; color: var(--color-text-secondary); margin-bottom: 2px; }
+  .state-card .state { font-size: 10px; color: var(--color-text-tertiary); }
+
+  .hint { margin-top: 24px; padding: 16px 20px; background: rgba(99, 102, 241, 0.08); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 10px; font-size: 12px; color: var(--color-text-secondary); line-height: 1.7; }
+  .hint strong { color: var(--color-primary-light); }
+  .hint ul { margin: 8px 0 0 16px; }
+  .hint li { margin-bottom: 4px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>♪ 搜索栏 + Action Row · 三级按钮层次</h1>
+  <p class="subtitle">SVG 线性图标 · 玻璃质感 · 主色填充 / 玻璃透明 / 收藏激活 三级</p>
+
+  <!-- 搜索栏 -->
+  <div class="section">
+    <div class="section-title">搜索栏</div>
+    <div class="mock">
+      <div class="search-bar">
+        <div class="search-input-wrap">
+          <svg class="search-icon" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input class="search-input" placeholder="搜索歌名/歌手..." value="周杰伦">
+        </div>
+        <button class="search-btn">
+          <svg viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </button>
+        <button class="import-btn">
+          <svg viewBox="0 0 24 24">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+          <span>导入</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Action Row 三级层次 -->
+  <div class="section">
+    <div class="section-title">封面区 Action Row · 三级按钮层次</div>
+    <div class="mock">
+      <div class="action-row">
+        <!-- 收藏 - 默认态 -->
+        <button class="icon-btn" title="收藏">
+          <svg viewBox="0 0 24 24">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        </button>
+        <!-- 收藏 - 激活态（粉色克制版） -->
+        <button class="icon-btn fav-active" title="已收藏">
+          <svg viewBox="0 0 24 24">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+          </svg>
+        </button>
+        <!-- 歌词 - 激活态 -->
+        <button class="icon-btn active" title="歌词">
+          <svg viewBox="0 0 24 24">
+            <path d="M9 18V5l12-2v13"/>
+            <circle cx="6" cy="18" r="3"/>
+            <circle cx="18" cy="16" r="3"/>
+          </svg>
+        </button>
+        <!-- 播放列表 - 默认态 -->
+        <button class="icon-btn" title="播放列表">
+          <svg viewBox="0 0 24 24">
+            <line x1="8" y1="6" x2="21" y2="6"/>
+            <line x1="8" y1="12" x2="21" y2="12"/>
+            <line x1="8" y1="18" x2="21" y2="18"/>
+            <line x1="3" y1="6" x2="3.01" y2="6"/>
+            <line x1="3" y1="12" x2="3.01" y2="12"/>
+            <line x1="3" y1="18" x2="3.01" y2="18"/>
+          </svg>
+        </button>
+        <!-- 频谱 - 默认态 -->
+        <button class="icon-btn" title="频谱">
+          <svg viewBox="0 0 24 24">
+            <line x1="6" y1="20" x2="6" y2="10"/>
+            <line x1="12" y1="20" x2="12" y2="4"/>
+            <line x1="18" y1="20" x2="18" y2="14"/>
+          </svg>
+        </button>
+      </div>
+      <div class="label-row">
+        <div class="label">收藏</div>
+        <div class="label">已收藏</div>
+        <div class="label">歌词</div>
+        <div class="label">列表</div>
+        <div class="label">频谱</div>
+      </div>
+
+      <!-- 三级层次说明 -->
+      <div class="state-grid">
+        <div class="state-card">
+          <button class="icon-btn" style="margin: 0 auto 8px;">
+            <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <div class="name">L2 · 默认态</div>
+          <div class="state">玻璃透明</div>
+        </div>
+        <div class="state-card">
+          <button class="icon-btn active" style="margin: 0 auto 8px;">
+            <svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+          </button>
+          <div class="name">L1 · 激活态</div>
+          <div class="state">主色填充</div>
+        </div>
+        <div class="state-card">
+          <button class="icon-btn fav-active" style="margin: 0 auto 8px;">
+            <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <div class="name">L3 · 收藏激活</div>
+          <div class="state">粉色克制</div>
+        </div>
+        <div class="state-card">
+          <button class="icon-btn" style="margin: 0 auto 8px; transform: translateY(-2px); box-shadow: 0 0 16px var(--color-primary-glow);">
+            <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          </button>
+          <div class="name">Hover 态</div>
+          <div class="state">上浮 + 发光</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hint">
+    <strong>设计要点：</strong>
+    <ul>
+      <li><strong>搜索栏</strong>：输入框前置搜索图标（聚焦时变主色），搜索按钮与导入按钮统一玻璃质感</li>
+      <li><strong>L1 主操作激活态</strong>：主色渐变填充 + 白色图标 + 主色光晕（用于歌词/列表/频谱激活）</li>
+      <li><strong>L2 默认态</strong>：玻璃透明 + 灰色线条图标（hover 时变主色 + 上浮 + 发光）</li>
+      <li><strong>L3 收藏激活态</strong>：粉色软背景 + 粉色填充心形 + 粉色光晕（克制版，不浮夸）</li>
+      <li><strong>所有图标</strong>：SVG 线性，stroke-width 1.8 → hover 2.2，激活态 fill 当前色</li>
+      <li><strong>心形图标</strong>：使用 Feather Icons 风格的圆角心形，比示例 1 的尖角心形更克制</li>
+    </ul>
+  </div>
+</div>
+</body>
+</html>

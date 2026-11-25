@@ -1,0 +1,24 @@
+{
+  "name": "music-box",
+  "version": "1.0.0",
+  "description": "音乐盒子 - 统一启动方案",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node scripts/start.js",
+    "start:dev": "node scripts/start.js --dev",
+    "start:api": "node scripts/start.js --api-only",
+    "start:prod": "docker-compose up -d",
+    "stop": "node scripts/stop.js",
+    "health": "node scripts/health.js",
+    "health:watch": "node scripts/health.js --watch",
+    "health:json": "node scripts/health.js --json",
+    "setup": "node scripts/setup.js",
+    "install:all": "node scripts/install-all.js",
+    "build:all": "node scripts/build-all.js"
+  },
+  "devDependencies": {
+    "chalk": "^5.3.0",
+    "ora": "^8.0.1"
+  }
+}

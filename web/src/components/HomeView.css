@@ -1,0 +1,423 @@
+/* ============================================================
+   HomeView — Mineradio 式首页信息流（深色沉浸 + 玻璃拟态）
+   ============================================================ */
+
+.home-view {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 8px 40px 32px;
+  animation: hv-fade-in 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  scrollbar-width: thin;
+}
+
+@keyframes hv-fade-in {
+  from { opacity: 0; transform: translateY(14px) scale(0.995); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ── Hero ── */
+.hv-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 28px 8px 30px;
+}
+
+.hv-hello {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.12em;
+  margin-bottom: 8px;
+}
+
+.hv-slogan {
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  background: linear-gradient(100deg, #F8FAFC 20%, #17C3B2 65%, #818CF8 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 14px;
+}
+
+.hv-hero-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12.5px;
+  color: var(--color-text-tertiary);
+}
+.hv-dot { opacity: 0.5; }
+
+/* 继续听大卡 */
+.hv-hero-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 26px 18px 18px;
+  border-radius: var(--radius-2xl);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--glass-shadow);
+  transition: transform var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
+  overflow: hidden;
+  flex-shrink: 0;
+  text-align: left;
+}
+.hv-hero-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(23, 195, 178, 0.10), transparent 55%);
+  pointer-events: none;
+}
+.hv-hero-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--glass-border-hover);
+  box-shadow:
+    0 18px 48px rgba(0, 0, 0, 0.52),
+    0 0 0 1px rgba(23, 195, 178, 0.18),
+    0 0 32px rgba(23, 195, 178, 0.08);
+}
+.hv-hero-card .hv-card-cover {
+  width: 86px;
+  height: 86px;
+  border-radius: var(--radius-xl);
+  box-shadow:
+    0 10px 28px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.09);
+}
+.hv-hero-tag {
+  display: inline-block;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: #17C3B2;
+  border: 1px solid rgba(23, 195, 178, 0.35);
+  border-radius: var(--radius-round);
+  padding: 2px 10px;
+  margin-bottom: 8px;
+}
+.hv-hero-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  max-width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.hv-hero-artist {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  margin-top: 4px;
+}
+.hv-hero-empty { cursor: default; }
+.hv-hero-empty-note {
+  width: 86px; height: 86px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 34px; color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: var(--radius-xl);
+}
+
+/* ── 快捷入口 ── */
+.hv-entries {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 14px;
+  margin-bottom: 34px;
+}
+.hv-entry {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: var(--radius-xl);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  transition: transform var(--transition-base), border-color var(--transition-base), background var(--transition-base);
+  text-align: left;
+}
+.hv-entry:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--entry-accent) 45%, transparent);
+  background: var(--glass-bg-hover);
+}
+.hv-entry-icon {
+  width: 40px; height: 40px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--entry-accent) 16%, transparent);
+  border: 1px solid color-mix(in srgb, var(--entry-accent) 30%, transparent);
+  flex-shrink: 0;
+}
+.hv-entry-text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.hv-entry-label { font-size: 13.5px; font-weight: 600; color: var(--color-text-primary); }
+.hv-entry-desc {
+  font-size: 11.5px;
+  color: var(--color-text-tertiary);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+/* ── 区块 ── */
+.hv-section { margin-bottom: 34px; }
+.hv-section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding: 0 4px;
+}
+.hv-section-title {
+  position: relative;
+  padding-left: 15px;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+/* 区块标题品牌色刻度条 */
+.hv-section-title::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 17px;
+  border-radius: 99px;
+  background: linear-gradient(180deg, #17C3B2, #6366F1);
+  box-shadow: 0 0 10px rgba(23, 195, 178, 0.5);
+}
+.hv-section-sub {
+  font-size: 12px;
+  color: var(--color-text-tertiary);
+  margin-top: 5px;
+}
+.hv-section-action {
+  font-size: 12.5px;
+  color: var(--color-text-secondary);
+  padding: 5px 12px;
+  border-radius: var(--radius-round);
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  transition: color var(--transition-base), border-color var(--transition-base);
+}
+.hv-section-action:hover { color: #17C3B2; border-color: rgba(23, 195, 178, 0.4); }
+.hv-section-fav {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 12px; color: var(--color-favorite);
+}
+
+/* ── 横滑卡片行 ── */
+.hv-row {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding: 6px 4px 14px;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+}
+.hv-row::-webkit-scrollbar { display: none; }
+
+.hv-card {
+  position: relative;
+  flex: 0 0 148px;
+  width: 148px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 10px;
+  border-radius: var(--radius-xl);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  scroll-snap-align: start;
+  transition: transform var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
+  text-align: left;
+}
+.hv-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--glass-border-hover);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+}
+.hv-card.current {
+  border-color: rgba(23, 195, 178, 0.5);
+  box-shadow: 0 0 0 1px rgba(23, 195, 178, 0.3), 0 10px 30px rgba(23, 195, 178, 0.08);
+}
+.hv-card-cover {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hv-card-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+/* 封面内描边 + 悬浮微缩（材质感） */
+.hv-card-cover::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08), inset 0 -18px 32px rgba(5, 6, 15, 0.35);
+  pointer-events: none;
+}
+.hv-card:hover .hv-card-cover img { transform: scale(1.06); }
+.hv-card-note { font-size: 30px; color: rgba(255, 255, 255, 0.4); }
+.hv-card-play {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 50%;
+  background: rgba(10, 12, 26, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #fff;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity var(--transition-base), transform var(--transition-base);
+  backdrop-filter: blur(8px);
+}
+.hv-card:hover .hv-card-play,
+.hv-hero-card:hover .hv-card-play {
+  opacity: 1;
+  transform: translateY(0);
+  background: rgba(23, 195, 178, 0.9);
+  border-color: transparent;
+}
+.hv-card-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.hv-card-sub {
+  font-size: 11.5px;
+  color: var(--color-text-tertiary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-top: -5px;
+}
+
+/* 骨架屏 */
+.hv-card-skeleton { pointer-events: none; }
+.hv-skeleton {
+  background: linear-gradient(100deg, rgba(255,255,255,0.05) 30%, rgba(255,255,255,0.11) 50%, rgba(255,255,255,0.05) 70%);
+  background-size: 200% 100%;
+  animation: hv-shimmer 1.4s ease infinite;
+  border-radius: var(--radius-md);
+}
+.hv-skeleton-line { height: 12px; width: 80%; }
+.hv-skeleton-line.short { width: 55%; }
+@keyframes hv-shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+
+.hv-section-empty {
+  padding: 26px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--color-text-tertiary);
+  border: 1px dashed var(--glass-border);
+  border-radius: var(--radius-xl);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* ── 底部工具行 ── */
+.hv-footer-tools {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 18px 0 6px;
+  font-size: 12px;
+  color: var(--color-text-tertiary);
+}
+.hv-tool-link {
+  font-size: 12px;
+  color: var(--color-text-tertiary);
+  transition: color var(--transition-base);
+}
+.hv-tool-link:hover { color: #17C3B2; }
+
+/* ── 窄屏适配 ── */
+@media (max-width: 1080px) {
+  .hv-entries { grid-template-columns: repeat(3, 1fr); }
+  .hv-hero { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 640px) {
+  .home-view { padding: 4px 18px 28px; }
+  .hv-entries { grid-template-columns: repeat(2, 1fr); }
+  .hv-slogan { font-size: 24px; }
+}
+
+/* ============================================================
+   入场错峰动画 + 辉光增强（电影感微动效）
+   ============================================================ */
+.hv-hero,
+.hv-entries,
+.hv-section,
+.hv-footer-tools {
+  animation: hv-stagger-rise 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.hv-hero { animation-delay: 0.02s; }
+.hv-entries { animation-delay: 0.1s; }
+.hv-section:nth-of-type(1) { animation-delay: 0.16s; }
+.hv-section:nth-of-type(2) { animation-delay: 0.22s; }
+.hv-section:nth-of-type(3) { animation-delay: 0.28s; }
+.hv-section:nth-of-type(4) { animation-delay: 0.34s; }
+.hv-footer-tools { animation-delay: 0.4s; }
+
+@keyframes hv-stagger-rise {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 卡片辉光：悬浮时封面透出品牌色光晕 */
+.hv-card::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: radial-gradient(60% 60% at 50% 30%, rgba(23, 195, 178, 0.12), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+.hv-card:hover::after { opacity: 1; }
+.hv-card:hover {
+  box-shadow:
+    0 14px 36px rgba(0, 0, 0, 0.5),
+    0 0 24px rgba(23, 195, 178, 0.12),
+    0 0 0 1px rgba(23, 195, 178, 0.2);
+}
+
+/* 快捷入口悬浮：图标微弹 + 辉光 */
+.hv-entry:hover .hv-entry-icon {
+  transform: scale(1.12) rotate(-4deg);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--entry-accent) 45%, transparent);
+}
+.hv-entry-icon { transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease; }
